@@ -1,0 +1,337 @@
+﻿@inject Microsoft.AspNetCore.Identity.SignInManager<BRO.Domain.Entities.ApplicationUser> signInManager;
+@using Microsoft.AspNetCore.Http;
+@using BRO.UI.Utilities;
+@using BRO.Domain.Query.Category;
+@using BRO.Domain.Query.Manufacturer;
+@using BRO.Domain.Utilities.PaginationSearchByRules;
+@using BRO.Domain.Utilities.StaticDetails; 
+@using System.Security.Claims; 
+ 
+@inject IHttpContextAccessor httpContextAccesor;
+@inject BRO.Domain.IMediator _mediator;
+
+@{ 
+
+    var categories=await _mediator.QueryAsync(new GetCategoriesQuery() { });
+    var manufacturers = await _mediator.QueryAsync(new GetManufacturersQuery() { });
+
+    var searchRules = new ProductSearchByRules().SearchByList;
+
+    
+}
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="~/images/favicon.ico">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+          integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+</head>
+<body>
+    <div class="wrapper main-bg  ">
+        <header>
+            <div class="title container text-center  ">
+                <div class="row align-items-center">
+                    <div class="col-md-3 text-center text-md-start mt-2 mt-md-0 py-1">
+                        <a asp-action="Index" asp-controller="Home" class="text-secondary display-6 text-uppercase  " asp-area="Customer">
+                            <img src="~/images/other/logo 170x56.png" class="img-fluid" style="width:150px" alt="BRO" />
+                        </a>
+                    </div>
+                    <div class="col-md-6 mb-2 mb-md-0">
+                        <form class="d-flex me-md-2 mt-2 mt-md-0 " asp-action="Index" asp-area="Customer" asp-controller="Home" method="get">
+                            <input class="form-control me-2" type="search" placeholder="Nazwa produktu" aria-label="Search"
+                                   name="SearchValue">
+                            <input type="text" name="SearchName" value="@searchRules.FirstOrDefault()" hidden />
+                            <button class="btn primaryColor border border-1" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                    @{
+                        var productsCount = 0;
+
+                        if (signInManager.IsSignedIn(User))
+                        {
+
+                            var userId = Guid.Parse(((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier).Value);
+                            productsCount = await _mediator.QueryAsync(new BRO.Domain.Query.ShoppingCartItem.GetShoppingCartItemsCountQuery() { UserId= userId});
+
+                        }
+                        else
+                        {
+
+                            var sessionShoppingCart = httpContextAccesor.HttpContext.Session.GetObject<List<BRO.Domain.Query.DTO.ShoppingCartItem.ShoppingCartItemBasicDTO>>(BRO.UI.Extensions.SessionExtensions.SessionShoppingCart);
+                            if (sessionShoppingCart == null)
+                                productsCount = 0;
+                            else
+                                productsCount=sessionShoppingCart.Count();
+                        }
+                    }
+                   
+                    <div class="col-md-3 mt-1 mb-1 text-end  mt-md-0 mb-md-0 shopping-cart-big">
+                        <div class="my-2">
+                            <a class="fs-2 position-relative shopping_cart_href  text-secondary  text-md-end " asp-area="Customer" asp-controller="ShoppingCart" asp-action="Index">
+                                <i class="fas fa-shopping-basket"></i>
+                                <span class="items-count shopping_cart_bg">
+                                    @if(productsCount>9)
+                                    {
+                                        <span>9+</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@productsCount</span>
+                                    }
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <nav class="navbar   navbar-expand-lg navbar-dark border-top-0 border-bottom-2 border-end-0 border-start-0  border border-secondary  ">
+                <div class="container-fluid">
+                    <button class="navbar-toggler bg-secondary text-dark" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon text-dark "></span>
+
+                    </button>
+                    <div class="shopping-cart-small ">
+                        <div class="my-2 me-2">
+                            <a class="fs-1 position-relative   text-secondary   " asp-area="Customer" asp-controller="ShoppingCart" asp-action="Index">
+                                <i class="fas fa-shopping-basket"></i>
+                                <span class="items-count shopping_cart_bg ">
+                                    @if (productsCount > 9)
+                                    {
+                                        <span>9+</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@productsCount</span>
+                                    }
+                                </span>
+
+                            </a>
+                        </div>
+                    </div>
+                   
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ms-auto me-auto mb-2 mb-lg-0 position-relative  ">
+                            <li class="nav-item dropdown  mt-0">
+                                <a class="nav-link mx-0 mx-md-2 mt-3 mt-lg-0 dropdown-toggle text-secondary  text-uppercase" href="#" id="navbarDropdown" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    Kategorie
+                                </a>
+                                @if (categories.Count() > 0)
+                                {
+                                    <div class="dropdown-menu mt-lg-3 bg-warning  navbar-list" aria-labelledby="navbarDropdown">
+                                        <ul class="d-lg-flex flex-lg-wrap px-2">
+                                            @foreach (var item in categories)
+                                            {
+                                                
+                                                <li class=" main_menu_item my-lg-1  text-center navbar-list-item p-0 px-2  my-lg-0 my-2"> <a class="dropdown-item  text-secondary p-0 border-2 border border-top " asp-action="Index" asp-controller="Home" asp-area="Customer" asp-route-SearchName="@searchRules[1]" asp-route-SearchValue="@item.Name">@item.Name</a></li>
+                                            }
+                                        </ul>
+                                    </div>
+
+                                }
+
+                            </li>
+
+                            <li class="nav-item dropdown position-static">
+                                <a class="nav-link mx-0 mx-md-2 dropdown-toggle text-uppercase text-secondary  " href="#" id="navbarDropdown" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    Producenci
+                                </a>
+                                @if (manufacturers.Count() > 0)
+                                {
+                                    <div class="dropdown-menu mt-lg-3 bg-warning  navbar-list navbar-list-absolute" aria-labelledby="navbarDropdown">
+                                        <ul class="d-lg-flex   flex-lg-wrap px-2 pb-0">
+                                            @foreach (var item in manufacturers)
+                                            {
+                                                <li class=" main_menu_item my-lg-1 text-center navbar-list-item p-0 px-2  my-lg-0 my-2"> <a class="dropdown-item text-secondary p-0 border-2 border border-top " asp-action="Index" asp-controller="Home" asp-area="Customer" asp-route-SearchName="@searchRules[2]" asp-route-SearchValue="@item.Name">@item.Name</a></li>
+                                            }
+                                        </ul>
+                                    </div>
+                                }
+
+                            </li>
+
+
+                            <li class="nav-item ">
+                                <a class="nav-link mx-0 mx-md-2 text-uppercase text-warning " asp-action="Index" asp-controller="Home" asp-area="Customer" asp-route-SearchName="@searchRules[3]" >Promocje</a>
+                            </li>
+
+
+                            <li class="nav-item">
+                                <a class="nav-link mx-0 mx-md-2  text-uppercase text-warning " asp-action="Index" asp-controller="Home" asp-area="Customer" asp-route-SearchName="@searchRules[4]" >Nowości</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link mx-0 mx-md-2  text-uppercase text-secondary" asp-action="Index" asp-controller="Tutorial" asp-area="Customer">Poradniki</a>
+                            </li>
+
+
+                            @if ( User.IsInRole(Roles.RoleEmployee) || User.IsInRole(Roles.RoleAdmin))
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link mx-0 mx-md-2 text-uppercase dropdown-toggle text-secondary " href="#" id="navbarDropdown" role="button"
+                                       data-bs-toggle="dropdown" aria-expanded="false">
+                                        Zarządzanie
+                                    </a>
+                                    <ul class="dropdown-menu mt-md-3 text-secondary" aria-labelledby="navbarDropdown">
+                                        <li>
+                                            @if (User.IsInRole(Roles.RoleAdmin))
+                                            {
+                                                <a class="dropdown-item text-secondary" asp-area="Admin" asp-controller="Category" asp-action="Index">Kategorie</a>
+                                            }
+
+                                        </li>
+                                        <li>
+                                            @if (User.IsInRole(Roles.RoleAdmin))
+                                            {
+                                                <a class="dropdown-item text-secondary" asp-area="Admin" asp-controller="Carrier" asp-action="Index">Dostawcy</a>
+                                            }
+
+                                        </li>
+                                        <li>
+                                            @if (User.IsInRole(Roles.RoleAdmin))
+                                            {
+                                                <a class="dropdown-item text-secondary" asp-area="Admin" asp-controller="Taste"
+                                                   asp-action="Index">Smaki</a>
+                                            }
+
+                                        </li>
+                                        <li>
+                                            @if (User.IsInRole(Roles.RoleAdmin))
+                                            {
+                                                <a class="dropdown-item text-secondary" asp-area="Admin" asp-controller="Manufacturer"
+                                                   asp-action="Index">Producenci</a>
+                                            }
+
+                                        </li>
+
+                                        <li>
+                                            @if (User.IsInRole(Roles.RoleAdmin))
+                                            {
+                                                <a class="dropdown-item text-secondary" asp-area="Admin" asp-controller="DiscountCode"
+                                                   asp-action="Index">Kody rabatowe</a>
+                                            }
+
+                                        </li>
+                                        <li>
+                                            @if (User.IsInRole(Roles.RoleAdmin))
+                                            {
+                                                <a class="dropdown-item text-secondary" asp-area="Admin" asp-controller="Product"
+                                               asp-action="Index">Produkty</a>
+                                            }
+                                        </li>
+                                        <li>
+                                            @if (User.IsInRole(Roles.RoleAdmin))
+                                            {
+                                                <a class="dropdown-item text-secondary" asp-area="Admin" asp-controller="User"
+                                                     asp-action="Index">Użytkownicy</a>
+                                            }  
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-secondary" asp-area="Employee" asp-controller="Order"
+                                               asp-action="Index">Zamówienia</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-secondary " asp-area="Employee" asp-controller="Review"
+                                               asp-action="Index">Recenzje</a>
+                                        </li>
+                                        <li>
+
+                                            @if (User.IsInRole(Roles.RoleAdmin))
+                                            {
+                                                <a class="dropdown-item text-secondary" asp-area="Admin" asp-controller="Comment"
+                                                   asp-action="Index">Komentarze</a>
+                                            }
+
+                                        </li>   
+                                    </ul>
+                                </li>
+                            }
+                        </ul>
+                        <ul class="navbar-nav mb-0  mb-lg-0 ">
+                            @if (signInManager.IsSignedIn(User))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link fs-5 text-center text-lg-start text-warning  " asp-area="Identity" asp-controller="UserSettings" asp-action="OrdersHistory">Konto</a>
+                                </li>
+                                <li class="nav-item ">
+                                    <form method="post" asp-action="Logout" asp-controller="Account" asp-area="Identity">
+                                        <button type="submit" class="nav-link fs-5 text-center m-auto m-lg-0 text-lg-start btn   ">
+                                            <i class="fas fa-sign-out-alt text-warning  "></i>
+                                        </button>
+                                    </form>
+                                </li>
+                            }
+                            else
+                            {
+
+                                <li class="nav-item">
+                                    <a class="nav-link fs-5 text-center text-lg-start text-warning text-uppercase  " asp-action="Login" asp-controller="Account" asp-area="Identity">Logowanie</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <div class="container ">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+    <footer class="text-white pt-3 pb-3 bg-white border border-top-2 border-dark border-bottom-0 border-start-0 border-end-0  ">
+        <div class="container  ">
+            <div class="row ">
+                <div class="col-md-3 mx-auto mt-2 text-center  text-md-start ">
+                    <h5 class="text-uppercase mb-2 font-weight-bold text-warning">Pomoc</h5>
+                    <p class="mb-2 ">
+                        <a asp-action="Shipping" asp-area="Customer" asp-controller="About" class="text-secondary" style="text-decoration: none;">Metody dostawy</a>
+                    </p>
+                    <p class="mb-2 ">
+                        <a asp-action="Payments" asp-area="Customer" asp-controller="About" class="text-secondary" style="text-decoration: none;">Metody płatności</a>
+                    </p>
+                    <p class="mb-2"> <a asp-action="Contact" asp-area="Customer" asp-controller="About" class="text-secondary" style="text-decoration: none;">Kontakt</a></p>
+
+                </div>
+                <div class="col-md-3 mx-auto mt-2 text-center  text-md-start ">
+                    <h5 class="text-uppercase mb-2 font-weight-bold text-warning">O nas</h5>
+                    <p class="mb-2 ">
+                        <a  asp-action="Refunds" asp-area="Customer" asp-controller="About" class="text-secondary" style="text-decoration: none;">Reklamacje / Zwroty </a>
+                    </p>
+                    <p class="mb-2 ">
+                        <a  asp-action="Regulations" asp-area="Customer" asp-controller="About" class="text-secondary" style="text-decoration: none;">Regulamin</a>
+                    </p>
+                    <p class="mb-2 ">
+                        <a asp-action="PrivacyPolicy" asp-area="Customer" asp-controller="About"  class="text-secondary" style="text-decoration: none;">
+                            Polityka prywatności
+                        </a>
+                    </p>
+                </div>
+                <div class="col-md-6 mx-auto text-center  mt-2 ">
+                    <h5 class="text-uppercase mb-md-3 mb-1 font-weight-bold text-warning">Obserwuj nas</h5>
+                    <div class="fs-1 ">
+                        <a  href="https://www.facebook.com"><i  class="fab fa-facebook-square"></i></a>
+                        <a  href="https://www.youtube.com"><i class="fab fa-youtube"></i></a>
+                        <a href="https://www.instagram.com"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

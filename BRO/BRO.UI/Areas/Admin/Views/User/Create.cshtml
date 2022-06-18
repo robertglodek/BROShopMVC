@@ -1,0 +1,109 @@
+﻿@model BRO.UI.ViewModels.RegisterUserViewModel
+@{
+    ViewData["Title"] = "Stwórz użytkownika";
+
+}
+<form method="post" class="mt-5">
+    <div asp-validation-summary="ModelOnly" class="text-danger val mb-2 ms-0 p-0"></div>
+    <div class="row p-3 border">
+        <div class="col-12 border-bottom ">
+            <h2 class="text-secondary">@ViewData["Title"]</h2>
+        </div>
+        <div class="col-12 col-md-8 pt-4">
+            <div class="form-group row align-items-center text-secondary">
+                <div class="col-sm-4 col-12">
+                    <label asp-for="Command.Email"></label>
+                </div>
+                <div class="col-sm-8 col-12">
+                    <input asp-for="Command.Email" class="form-control" />
+                    <span asp-validation-for="Command.Email" class="text-danger">
+                    </span>
+                </div>
+            </div>
+            <div class="form-group row align-items-center text-secondary mt-3">
+                <div class="col-sm-4 col-12">
+                    <label asp-for="Command.Password"></label>
+                </div>
+                <div class="col-sm-8 col-12">
+                    <input asp-for="Command.Password" class="form-control" />
+                    <span asp-validation-for="Command.Password" class="text-danger">
+                    </span>
+                </div>
+            </div>
+            <div class="form-group row align-items-center text-secondary mt-3">
+                <div class="col-sm-4 col-12">
+                    <label asp-for="Command.ConfirmPassword"></label>
+                </div>
+                <div class="col-sm-8 col-12">
+                    <input asp-for="Command.ConfirmPassword" class="form-control noNumberValidation" />
+                    <span asp-validation-for="Command.ConfirmPassword" class="text-danger">
+                    </span>
+                </div>
+            </div>
+            <div class="form-group row align-items-center text-secondary mt-3">
+                <div class="col-sm-4 col-12">
+                    <label asp-for="Command.FirstName"></label>
+                </div>
+                <div class="col-sm-8 col-12">
+                    <input asp-for="Command.FirstName" class="form-control noNumberValidation" />
+                    <span asp-validation-for="Command.FirstName" class="text-danger">
+                    </span>
+                </div>
+            </div>
+            <div class="form-group row align-items-center text-secondary mt-3">
+                <div class="col-sm-4 col-12">
+                    <label asp-for="Command.LastName"></label>
+                </div>
+                <div class="col-sm-8 col-12">
+                    <input asp-for="Command.LastName" class="form-control noNumberValidation" />
+                    <span asp-validation-for="Command.LastName" class="text-danger">
+                    </span>
+                </div>
+            </div>
+            <div class="form-group row align-items-center text-secondary mt-3">
+                <div class="col-sm-4 col-12">
+                    <label asp-for="Command.PhoneNumber"></label>
+                </div>
+                <div class="col-sm-8 col-12">
+                    <input asp-for="Command.PhoneNumber" class="form-control noNumberValidation" />
+                    <span asp-validation-for="Command.PhoneNumber" class="text-danger">
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group text-secondary row mt-3">
+                <div class="col-sm-4 col-12">
+                    Rola
+                </div>
+                <div class="col-sm-8 col-12">
+                    <div >
+                        @Html.DropDownListFor(m => m.Command.Role, Model.Roles, new { @class = "form-control" })
+                        <span asp-validation-for="@Model.Command.Role" class="text-danger"></span>
+
+                    </div>
+                </div>
+            </div>
+          
+            <div class="row mt-4">
+                <div class="col-12 col-md-8 offset-md-4">
+                    <div class="row">
+                        <div class=" col-12 col-md-6 ">
+                            <button type="submit" class="btn btn-outline-warning form-control">Stwórz</button>
+                        </div>
+                        <div class="col-12 col-md-6 mt-1 mt-md-0">
+                            <a asp-action="Index" class="btn btn-outline-secondary form-control">Powrót</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+
+}
+
+

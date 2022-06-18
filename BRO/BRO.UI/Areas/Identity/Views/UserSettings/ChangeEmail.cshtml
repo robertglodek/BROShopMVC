@@ -1,0 +1,58 @@
+﻿@model BRO.UI.ViewModels.ChangeEmailViewModel
+
+<div class="row align-items-center mb-5 mt-5">
+    <div class="col-1  col-sm-6">
+    </div>
+    <div class="col-11 col-sm-6  text-end">
+        <h3 class="text-secondary m-0 ">Zmiana adresu e-mail</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <partial name="_AccountPartial" />
+    </div>
+    <div class="col-md-7 offset-md-2">
+        <div class="row">
+            <div class="col-md-8  offset-md-2">
+                <div class="text-end">
+                    @if (Model.IsEmailConfirmed)
+                    {
+                        <span class="text-warning ">Adres e-mail potwierdzony</span>
+                    }
+                    else
+                    {
+                        <a class="text-danger" asp-area="Identity" asp-controller="Account" asp-action="ConfirmEmail">Adres email niepotwierdzony, kliknij aby potwierdzić</a>
+                    }
+                </div>
+                <form method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger val mt-3 mb-2 ms-0 p-0"></div>
+                    <input asp-for="IsEmailConfirmed" hidden readonly/>
+                    <input asp-for="Command.Id" hidden readonly/>
+                    <div class="form-group">
+                        <label asp-for="Command.Email"></label>
+                        <input asp-for="Command.Email" class="form-control my-2" />
+                        <span asp-validation-for="Command.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Command.PasswordToConfirm"></label>
+                        <input asp-for="Command.PasswordToConfirm" class="form-control my-2" />
+                        <span asp-validation-for="Command.PasswordToConfirm" class="text-danger"></span>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-outline-warning m-3">Zatwierdź zmiany</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<partial name="_ActionPerformedResultPartial" />
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+    <partial name="_ActionPerformedResultScriptsPartial" />
+}
+
+

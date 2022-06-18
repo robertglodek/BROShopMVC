@@ -1,0 +1,472 @@
+﻿@model BRO.UI.ViewModels.AddToShoppingCartViewModel
+@inject Microsoft.AspNetCore.Identity.SignInManager<BRO.Domain.Entities.ApplicationUser> signInManager;
+@{
+    ViewData["Title"] = "Produkt";
+    var photoPath = "~/images/products/";
+}
+
+<div class="row align-items-center mb-5 mt-5 ps-0">
+    <div class="col-6 ps-0">
+        <h3 class="text-secondary m-0  text-uppercase ">@Model.Product.Name</h3>
+    </div>
+    <div class="col-6  text-end">
+    </div>
+</div>
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger val m-0 p-0"></div>
+    <div class="row mb-3 py-5 pt-3 mt-0 border border-1 rounded-3 text-light  ">
+        <input id="total_pages" asp-for="@Model.Comments.TotalPages" hidden />
+        <input id="current_page" asp-for="@Model.Comments.CurrentPage" hidden />
+        <input class="ProductId" hidden asp-for="Product.Id" />
+        <div class="col-md-3 mb-4 mb-md-0">
+            <div>
+                <img src="@photoPath@Model.Product.ImageUrlLarge" class="rounded  img-fluid" asp-append-version="true" />
+
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="reviews">
+                <div class="fs-4">
+                    @if (signInManager.IsSignedIn(User) && User.IsInRole(Roles.RoleUserIndividual))
+                    {
+                        if (Model.OwnOpinion != null)
+                        {
+                            <div>
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    if (Model.OwnOpinion.Rating >= i)
+                                    {
+                                        <i class="fas fa-star fa-sm text-primary"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="far fa-star fa-sm text-primary"></i>
+                                    }
+                                }
+                                <span class="fs-6 ps-2 text-secondary text-decoration-underline align-bottom">twoja ocena</span>
+                            </div>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-outline-primary btn-square btn-lg py-0 px-4 showReviewWindow">Oceń</button>
+                        }
+                    }
+                </div>
+                <div class="mt-0 fs-4">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        if (Model.Product.Rating >= i)
+                        {
+                            <i class="fas fa-star fa-sm text-primary"></i>
+                        }
+                        else
+                        {
+                            <i class="far fa-star fa-sm text-primary"></i>
+                        }
+                    }
+                    <span class="fs-6 text-secondary ps-2 text-decoration-underline align-bottom">@Model.Product.ReviewsNumber ocen klientów</span>
+                </div>
+            </div>   
+            <div class="price my-2">
+                @if (Model.Product.IsDiscount == true)
+                {
+
+                    <h4 class="mb-0 fs-5 font-weight-semibold text-warning d-inline">@Model.Product.PromotionalPrice.ToString("C")</h4>
+                    <h4 class="mb-3 ms-2 fs-5 font-weight-semibold text-secondary d-inline"><strike>@Model.Product.RegularPrice.ToString("C")</strike> </h4>
+                }
+                else
+                {
+                    <h4 class="mb-3 fs-5 font-weight-semibold text-dark  ">@Model.Product.RegularPrice.ToString("C")</h4>
+                }
+            </div>
+            <div class="row ms-0 mt-3 ">
+                <div class="col-5  ps-0 ">
+                    <p class="mb-1 text-dark"><strong>Waga</strong></p>
+                    <p class="mb-1 text-dark"><strong>Porcje</strong></p>
+                    <p class="mb-1 text-dark"><strong>Producent</strong></p>
+                    <p class="mb-1 text-dark"><strong>Kategoria</strong></p>
+                </div>
+                <div class="col-7 ms-0 ">
+                    <p class="mb-1 text-dark">@Model.Product.WeightGram g</p>
+                    <p class="mb-1 text-dark">@Model.Product.Portions</p>
+                    <p class="mb-1 text-dark">@Model.Product.Manufacturer.Name</p>
+                    <p class="mb-1 text-dark">@Model.Product.Category.Name</p>
+                </div>
+            </div>
+            <hr class="text-dark">
+        </div>
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-12">
+                    <div>
+                        <label class=" my-2 text-dark">Wybierz ilość</label>
+                        <input min="1" type="number" class="form-control" asp-for="Command.Count" />
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label class=" my-2 text-dark">Smak</label>
+                    @Html.DropDownListFor(m => Model.Command.ProductTasteId, Model.Tastes, new { @class = "form-control" })
+                    <span asp-validation-for="Command.ProductTasteId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-outline-warning btn-md mr-1 mb-2">Dodaj do koszyka</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class=" row  rounded-2 py-3 border border-1 ">
+    <nav>
+        <div class="nav nav-tabs " id="nav-tab" role="tablist">
+            <button class="nav-link active text-warning " id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-description" type="button" role="tab" aria-controls="nav-description" aria-selected="true">Opis produktu</button>
+            <button class="nav-link text-warning " id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-use" type="button" role="tab" aria-controls="nav-use" aria-selected="false">Stosowanie</button>
+            <button class="nav-link text-warning " id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-nutritionalInformation" type="button" role="tab" aria-controls="nav-nutritionalInformation" aria-selected="false">Informacje żywieniowe</button>
+            <button class="nav-link text-warning " id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-comments" type="button" role="tab" aria-controls="nav-comments" aria-selected="false">Komentarze</button>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent ">
+        <div class="tab-pane text-light fade show active p-2 pt-3 text-dark" id="nav-description" role="tabpanel" aria-labelledby="nav-home-tab">@Model.Product.Description</div>
+        <div class="tab-pane text-light fade p-2 pt-3 text-dark" id="nav-use" role="tabpanel" aria-labelledby="nav-profile-tab">@Model.Product.Use</div>
+        <div class="tab-pane text-light fade p-2 pt-3 text-dark" id="nav-nutritionalInformation" role="tabpanel" aria-labelledby="nav-contact-tab">@Model.Product.NutritionalInformation</div>
+        <div class="tab-pane text-light fade p-2 pt-3 text-dark" id="nav-comments" role="tabpanel" aria-labelledby="nav-contact-tab">
+            <div>
+                <div class="row">
+                    <div class="col-12">
+                        <ul class="comments px-0">
+                            @if (Model.Comments.TotalElementsCount > 0)
+                            {
+                                @foreach (var item in Model.Comments.Comments)
+                                {
+                                    <li class="border p-1 border-1 my-2">
+
+                                        <div class="d-sm-flex p-2 ">
+                                            <div class="p-0  text-secondary">
+                                                <p class="p-0 m-0">
+                                                    @item.User.FirstName
+                                                </p>
+                                                <p class="m-0 p-0">
+                                                    @item.PublishDateTime.ToLocalTime().ToString("MM/dd/yyyy")
+                                                </p>
+                                            </div>
+                                            <div class="pt-0 w-100 ps-md-4  ps-0 ps-sm-2">
+                                                <div class="ps-md-0 p-0">
+                                                    @item.Content
+                                                </div>
+                                                @if (item.CommentResponse != null && item.CommentResponse.Length > 0)
+                                                {
+                                                    <div class="border border-1   p-1 d-sm-flex ">
+                                                        <div class="text-secondary  pe-2">
+                                                            Sklep BRO
+                                                        </div>
+                                                        <div class="ms-0 ms-sm-1 text-warning">
+                                                            @item.CommentResponse
+                                                        </div>
+
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </li>
+                                }
+                            }
+                            else
+                            {
+                                <div>
+                                    <span class="text-secondary">Brak komentarzy dla tego produktu!!</span>
+                                </div>
+                            }
+                        </ul>
+                        @if (Model.Comments.TotalPages > 1)
+                        {
+                            <div>
+                                <a id="more_comments" asp-action="ShowMoreComments" asp-controller="Home" asp-area="Customer" asp-route-PageNumber="2" asp-route-ProductId="@Model.Product.Id" class="text-warning ">Pokaż więcej komentarzy</a>
+                            </div>
+                        }
+                    </div>
+                    @if (signInManager.IsSignedIn(User) && User.IsInRole(Roles.RoleUserIndividual))
+                    {
+                        <div class="new_comment_wrapper">
+                            <form method="post">
+                                <p class="my-2  text-danger comment_content_error" style="display:none">Opinia musi zawierać od 4 do 100 znaków</p>
+                                <div>
+                                    <textarea class="w-100 p-2 new_comment_content"></textarea>
+                                </div>
+                                <div class="text-end">
+                                    <button type="button" class="btn btn-outline-warning px-5 send-comment">Wyślij</button>
+                                </div>
+                            </form>
+                        </div>
+                    }
+                    else if (!signInManager.IsSignedIn(User))
+                    {
+                        <p>Musisz być zalogowany aby dodawać komentarze</p>
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="wrapperOpinion w-100 h-100 position-fixed top-0 start-0 " style="display:none; z-index:5; background-color:rgba(0,0,0,0.4)">
+    <div class="row p-5  border position-fixed top-50 start-50 m-0 translate-middle deleteConfirmation bg-white">
+        <form method="post">
+            <div class="col-12 pb-2  border-bottom  text-center">
+                <span class="text-secondary fs-3">Dodaj opinię</span>
+            </div>
+            <div class="starsWrapper d-flex text-center my-2">
+                <div class="img w-100  fs-2"><i class="far fa-star fa-sm text-primary"></i></div>
+                <div class="img w-100 fs-2"><i class="far fa-star fa-sm text-primary"></i></div>
+                <div class="img w-100 fs-2"><i class="far fa-star fa-sm text-primary"></i></div>
+                <div class="img w-100 fs-2"><i class="far fa-star fa-sm text-primary"></i></div>
+                <div class="img w-100 fs-2"><i class="far fa-star fa-sm text-primary"></i></div>
+            </div>
+            <p class="ratingError text-danger my-2 mt-0" style="display:none;">Musisz wybrać ocenę</p>
+            <div class="textAreaWrapper">
+                <textarea class="textAreaOpinion form-control" placeholder="Napisz swoją opinię"></textarea>
+            </div>  
+            <div class="row mt-3 mx-0 px-0">
+                <div class="col-12 col-md-6 ">
+                    <button type="button" class="btn btn-outline-warning form-control confirmOpinion">Dodaj</button>
+                </div>
+                <div class="col-12 col-md-6 mt-3 mt-md-0">
+                    <span asp-action="Index"
+                          class="btn btn-outline-primary form-control close">Powrót</span>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="action_perform  pointer position-fixed   align-items-center text-white rounded p-3">
+    <i class="fas fa-check "></i>
+    <span class="ps-2 acction_message"></span>
+</div>
+
+@section Scripts
+{
+
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const more_comments_button = document.querySelector("#more_comments");
+        const ul_control_comment = document.querySelector("ul.comments");
+        const commentContentControl = document.querySelector(".new_comment_content");
+        const commentContentErrorControl = document.querySelector(".comment_content_error");
+        let success_action_timeout;
+        document.querySelector(".action_perform").addEventListener("click", (event) => {
+            clearTimeout(success_action_timeout);
+            document.querySelector(".action_perform").classList.remove("action_perform_active");
+
+        })
+        function hideActionSuccess() {
+            document.querySelector(".action_perform").classList.remove("action_perform_active")
+        }
+
+        if (more_comments_button != null)
+        {
+            more_comments_button.addEventListener("click", function (event) {
+                event.preventDefault();
+                var xhr = new XMLHttpRequest();
+                xhr.open("Get", more_comments_button.getAttribute("href"), true);
+                var productIdValue = document.querySelector(".ProductId").value;       
+                xhr.onload = function () {
+                    if (this.status == 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.success) {
+                            var currentPage = document.querySelector("#current_page");
+                            var totalPages = document.querySelector("#total_pages");
+                            currentPage.value = Number(currentPage.value) + 1;
+                            response.data.comments.forEach(element => {
+
+                                let responseToComment = "";
+                                if (element.CommentResponse != null) {
+                                    responseToComment = `<div class="border border-1   p-2 d-flex">
+                                                                <div class="text-secondary border-end pe-2">
+                                                                    Sklep BRO
+                                                                </div>
+                                                                <div class="ms-2">${element.commentResponse}
+                                                                </div>
+                                                          </div>`;
+                                }
+                                let newCommentTemplate =
+                                    `<div class="d-flex">
+                                                <div class="pt-2 ps-2 text-secondary">
+                                                    <p class="p-0 m-0">
+                                                        ${element.user.firstName}
+                                                    </p>
+                                                    <p>
+                                                        ${element.shortDateTimeOffset}
+                                                    </p>
+                                                </div>
+                                                <div class="pt-2 ps-5 w-100">
+                                                    <div>
+                                                        ${element.content}
+                                                    </div>
+                                                         ${responseToComment}
+                                                </div>
+                                            </div>`
+                                let newElement = document.createElement("li");
+                                newElement.classList.add("border", "p-1", "border-1", "my-2")
+                                newElement.innerHTML = newCommentTemplate
+                                ul_control_comment.appendChild(newElement)
+                            });
+                            if (currentPage.value >= Number(totalPages.value)) {
+                                more_comments_button.style.display = "none";
+                            }
+
+                            else
+                            {
+                                var productIdElement = document.querySelector(".ProductId");
+                                var path = `/Customer/Home/ShowMoreComments?PageNumber=${(Number(currentPage.value) + 1)}&ProductId=${productIdElement.value}`;
+                                more_comments_button.setAttribute("href", path)
+
+                            }
+
+
+                        }
+                        else {  
+                            document.querySelector(".action_perform").classList.add("bg-danger")
+                            document.querySelector(".acction_message").textContent = "Operacja nie powiodła się";
+                            document.querySelector(".action_perform").classList.add("action_perform_active")
+                            success_action_timeout = setTimeout(hideActionSuccess, 3000);
+                        }
+                    }
+                }
+                xhr.send();
+            })
+        }
+
+        function CloseReviewWindow()
+        {
+           
+            ratingErrorElement.style.display = "none";
+            document.querySelector(".textAreaOpinion").value = "";
+            stars.forEach(element => {
+                element.style.opacity = "50%"
+            })
+            rating = -1;
+            isClicked = false;
+            document.querySelector(".wrapperOpinion").style.display = "none";
+        }
+      
+        if (document.querySelector(".showReviewWindow") != null)
+        {
+
+            document.querySelector(".showReviewWindow").addEventListener("click", function () {
+                document.querySelector(".wrapperOpinion").style.display = "block";
+            });
+
+
+            var stars = document.querySelectorAll(".starsWrapper i");
+            var rating = -1;
+            var isClicked = false;
+            var ratingErrorElement = document.querySelector(".ratingError");    
+            stars.forEach((element, index) => {
+                element.addEventListener("mouseover", function (event) {
+                    for (let i = 0; i <= index; i++) {
+                        stars[i].style.opacity = "100%";
+
+                    }
+                })
+                element.addEventListener("mouseleave", function (event) {
+                    for (let i = 0; i <= index; i++) {
+                        if (!isClicked) {
+                            stars[i].style.opacity = "50%";
+                        } else {
+
+                            if (i > rating)
+                                stars[i].style.opacity = "50%";
+                        }
+                    }
+                })
+                element.addEventListener("click", function (event) {
+                    rating = index;
+                    stars.forEach(element => {
+                        element.style.opacity = "50%"
+                    })
+                    for (let i = 0; i <= index; i++) {
+                        stars[i].style.opacity = "100%";
+                        isClicked = true;
+                    }
+                })
+            })      
+        }
+        document.querySelector(".confirmOpinion").addEventListener("click", () => {
+            var value = rating + 1;
+            if (value == 0) {
+                ratingErrorElement.style.display = "block";
+                return ""
+            }
+            else
+            {
+                ratingErrorElement.style.display = "none";
+            }
+            var path = `/Customer/Home/Review`
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", path, true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+            xhr.setRequestHeader("RequestVerificationToken", document.querySelector("input[name='__RequestVerificationToken']").value);
+            var productIdValue = document.querySelector(".ProductId").value;
+            var content = document.querySelector(".textAreaOpinion").value;
+            var dataToSend = `productId=${productIdValue}&rating=${Number(value)}&content=${content}`
+            xhr.onload = function () {
+                if (this.status == 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    document.querySelector(".action_perform").classList.add("action_perform_active")
+                    if (response.success)
+                    {
+                        document.querySelector(".action_perform").classList.add("bg-success")
+                        document.querySelector(".acction_message").textContent = "Twoja opinia została wysłana";
+                        document.querySelector(".showReviewWindow").style.display = "none";
+                    }
+                    else
+                    {
+                        document.querySelector(".action_perform").classList.add("bg-danger")
+                        document.querySelector(".acction_message").textContent = "Nie udało sie wysłać opini";     
+                    }
+                    success_action_timeout = setTimeout(hideActionSuccess, 3000);
+                    CloseReviewWindow();
+                }
+            }
+            xhr.send(dataToSend);
+        })
+       
+        document.querySelector(".close").addEventListener("click", CloseReviewWindow)
+        document.querySelector(".send-comment").addEventListener("click", (event) => {
+            if (commentContentControl.value.length >= 4 && commentContentControl.value.length <= 100) {
+                commentContentErrorControl.style.display = "none"
+
+                var path = `/Customer/Home/Comment`
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", path, true);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+                xhr.setRequestHeader("RequestVerificationToken", document.querySelector("input[name='__RequestVerificationToken']").value);
+                var productIdValue = document.querySelector(".ProductId").value;
+                var dataToSend = `productId=${productIdValue}&content=${commentContentControl.value}`
+                xhr.onload = function () {
+                    if (this.status == 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.success)
+                        {
+                            document.querySelector(".action_perform").classList.add("action_perform_active")
+                            document.querySelector(".action_perform").classList.add("bg-success")
+                            document.querySelector(".acction_message").textContent = "Twój komentarz został wysłany"; 
+                            success_action_timeout = setTimeout(hideActionSuccess, 3000)
+                            commentContentControl.value = "";
+                        }
+                        else {
+                            commentContentControl.value = "";
+                            commentContentErrorControl.style.display = "block";
+                            commentContentErrorControl.textContent = response.message;
+                        }
+                    }
+                }
+                xhr.send(dataToSend);
+            }
+            else {
+                commentContentErrorControl.style.display = "block"
+            }
+        })
+    </script>
+}
+

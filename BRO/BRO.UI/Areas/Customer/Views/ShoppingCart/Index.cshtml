@@ -1,0 +1,247 @@
+﻿@using BRO.Domain.Utilities.StaticDetails;
+
+@inject Microsoft.AspNetCore.Identity.SignInManager<BRO.Domain.Entities.ApplicationUser> signInManager;
+@model BRO.UI.ViewModels.ShoppingCartViewModel
+
+@{
+    ViewData["Title"] = "Koszyk";
+    var photoPath = "~/images/products/";
+}
+<div class="row align-items-center mb-5 mt-5">
+    <div class="col-6 ps-md-0 ps-2">
+        <h3 class="text-secondary m-0 text-uppercase">Koszyk</h3>
+    </div>
+    <div class="col-6  text-end">
+        <a class="btn btn-outline-warning" asp-area="Customer" asp-controller="Home" asp-action="Index">Kontynuuj zakupy</a>
+
+    </div>
+</div>
+
+<form id="shoppingCartForm" method="post">
+    @if (Model.Cart.Count() > 0)
+    {
+        <input type="text" style="display: none" />
+        <div class="text-danger val" asp-validation-summary="All"></div>
+        <div class="row border border-2 mt-1">
+            <div class="col-md-12 p-0 bg-white rounded mb-5">
+                <table class="table tbasket">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="border-0 bg-light">
+                                <div class="py-2 px-3 ps-0 text-uppercase">Produkt</div>
+                            </th>
+                            <th scope="col" class="border-0 bg-light">
+                                <div class="py-2 text-uppercase text-center">Cena</div>
+                            </th>
+                            <th scope="col" class="border-0 bg-light">
+                                <div class="py-2 text-uppercase text-center">Ilość</div>
+                            </th>
+                            <th scope="col" class="border-0 bg-light">
+                                <div class="py-2 text-uppercase text-center">Usuń</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="parent">
+                        @foreach (var item in Model.Cart)
+                        {
+                            <tr id="cart_element_@item.Id">
+                                <td>
+                                    <a asp-action="Details" asp-area="Customer" asp-controller="Home" asp-route-id="@item.ProductTaste.ProductId">
+                                        <div class="p-2 ps-0">
+                                            <img src="@photoPath@item.ProductTaste.Product.ImageUrlMain" asp-append-version="true" width="70" class="img-fluid rounded me-2 " />
+                                            <div class="ml-3 d-inline-block align-middle">
+                                                <h5 class="mb-0"> <a href="#" class="text-dark d-inline-block">@item.ProductTaste.Product.Name</a></h5><span class="text-muted font-weight-normal font-italic">Smak: @item.ProductTaste.Taste.Name</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </td>
+                                <td class="align-middle text-center"><strong id="product_price_@item.Id">@item.Price.ToString("C")</strong></td>
+                                <td class="align-middle  ">
+                                    <div class="d-flex align-items-stretch justify-content-center">
+                                        <a class="lessCart btn btn-outline-secondary" data-id="@item.Id">
+                                            <i class="fas fa-minus"></i>
+                                        </a>
+                                        <input min="1" type="number" class="inputCountCart text-center" style="min-width:40px" asp-for="@item.Count" data-count="@item.Count" id="product_count_@item.Id" data-id="@item.Id" />
+                                        <a class="moreCart btn btn-outline-secondary" data-id="@item.Id ">
+                                            <i class="fas fa-plus"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <a asp-action="Delete" asp-route-Id="@item.Id" class="deleteCart   text-dark" data-id="@item.Id"><i class="far fa-trash-alt "></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row border border-2 mt-1">
+            <div class="d-flex  align-items-center py-2 bg-light">
+                <span class="text-dark pe-2 fs-6">Wartość twojego zamówienia:</span><span id="orderTotal" class="fs-4" data-orderTotal="@Model.OrderProductsTotal">@Model.OrderProductsTotal.ToString("C")</span>
+            </div>
+            <div class="col-md-4 offset-md-8 p-0 bg-white rounded mb-1 p-2">
+                <div>
+                    @if (signInManager.IsSignedIn(User) && User.IsInRole(Roles.RoleUserIndividual))
+                    {
+                        <a asp-action="Delivery" asp-area="Customer" asp-controller="Order" class="btn btn-outline-danger form-control">Dalej</a>
+                    }
+                    else if (!signInManager.IsSignedIn(User))
+                    {
+                        <a asp-action="Login" asp-area="Identity" asp-controller="Account" asp-route-returnUrl="@Url.Action("Index","ShoppingCart",new {area="Customer"})"  class="btn btn-outline-danger form-control">Zaloguj się aby kontynuować</a>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</form>
+<div id="emptybasket" class="border-2 border-secondary border row text-center mt-4 align-items-center p-2 mx-md-0 mx-3" @(Model.Cart.Count() > 0 ? "style=display:none" : "")>
+    <p class="fs-5 m-0 text-secondary ">Pusty koszyk !!</p>
+</div>
+
+@section Scripts
+{
+    <script>
+        const formatter = new Intl.NumberFormat('pl-PL', {
+            style: 'currency',
+            currency: 'PLN',
+            minimumFractionDigits: 2
+        })
+        const orderTotalElement = document.querySelector("#orderTotal");
+
+        for (element of document.querySelectorAll(".moreCart")) {
+            element.addEventListener("click", function (event)
+            {
+                event.preventDefault();
+                const elementId = this.dataset.id;
+                const productCountElement = document.querySelector("#product_count_" + elementId);
+                var path = `/Customer/ShoppingCart/EditQuantity/${this.dataset.id}?count=${Number(productCountElement.value) + 1}`;
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", path, true);
+                xhr.setRequestHeader("RequestVerificationToken", document.querySelector("input[name='__RequestVerificationToken']").value);
+                xhr.onload = function () {
+                    if (this.status == 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.success) {
+                            productCountElement.dataset.count = response.item.count;
+                            productCountElement.value = response.item.count;
+
+                            orderTotalElement.dataset.ordertotal = Number(orderTotalElement.dataset.ordertotal) + Number(response.item.price);
+                            orderTotalElement.textContent = formatter.format(Number(orderTotalElement.dataset.ordertotal));
+                            document.querySelector(".validation-summary-valid").innerHTML = "";
+                        }
+                        else {
+                            const errorHtmlElement = `<ul><li>${response.message}</li></ul>`;
+                            document.querySelector(".validation-summary-valid").innerHTML = errorHtmlElement;
+                        }
+                    }
+                }
+                xhr.send();
+            });
+        }
+        for (element of document.querySelectorAll(".lessCart")) {
+            element.addEventListener("click", function (event) {
+                event.preventDefault();
+                const elementId = this.dataset.id;
+                const productCountElement = document.querySelector("#product_count_" + elementId);     
+                if (Number(productCountElement.value) != 1) {
+                    var path = `/Customer/ShoppingCart/EditQuantity/${this.dataset.id}?count=${Number(productCountElement.value) - 1}`
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", path, true);
+                    xhr.setRequestHeader("RequestVerificationToken", document.querySelector("input[name='__RequestVerificationToken']").value);
+                    xhr.onload = function () {
+                        if (this.status == 200) {
+                            var response = JSON.parse(xhr.responseText);
+                            if (response.success) {
+                                productCountElement.dataset.count = response.item.count;
+                                productCountElement.value = response.item.count;
+                                orderTotalElement.dataset.ordertotal = Number(orderTotalElement.dataset.ordertotal) - Number(response.item.price);
+                                orderTotalElement.textContent = formatter.format(Number(orderTotalElement.dataset.ordertotal));
+                                document.querySelector(".validation-summary-valid").innerHTML = "";
+                            }
+                            else {
+                                const errorHtmlElement = `<ul><li>${response.message}</li></ul>`;
+                                document.querySelector(".validation-summary-valid").innerHTML = errorHtmlElement;
+                            }
+                        }
+                    }
+                    xhr.send();
+                }
+            });
+        }
+
+        for (element of document.querySelectorAll(".deleteCart")) {
+            element.addEventListener("click", function (event) {
+                event.preventDefault();
+                const elementId = this.dataset.id;
+                var xhr = new XMLHttpRequest();
+                xhr.open("DELETE", this.getAttribute("href"), true);
+                xhr.setRequestHeader("RequestVerificationToken", document.querySelector("input[name='__RequestVerificationToken']").value);
+                xhr.onload = function () {
+                    if (this.status == 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.success) {
+                            orderTotalElement.dataset.ordertotal = Number(orderTotalElement.dataset.ordertotal) - (Number(response.item.price) * Number(response.item.count));
+                            orderTotalElement.textContent = formatter.format(Number(orderTotalElement.dataset.ordertotal));
+                            WhenRemovesProducts(elementId, Number(orderTotalElement.dataset.ordertotal));
+                            document.querySelector(".validation-summary-valid").innerHTML = "";
+                        }
+                        else {
+                            const newHtmlElement = `<ul><li>${response.message}</li></ul>`;
+                            document.querySelector(".validation-summary-valid").innerHTML = newHtmlElement;
+                        }
+                    }
+                }
+                xhr.send();
+            });
+        }
+        for (element of document.querySelectorAll(".inputCountCart")) {
+            element.addEventListener("change", function (event) {
+                event.preventDefault();
+                const elementId = this.dataset.id;
+                const productCountElement = document.getElementById("product_count_" + elementId);   
+                const count = Number(this.dataset.count);
+                if (Number(productCountElement.value) != count && Number(productCountElement.value) > 0) {
+                    var path = `/Customer/ShoppingCart/EditQuantity/${this.dataset.id}?count=${Number(productCountElement.value)}`
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", path, true);
+                    xhr.setRequestHeader("RequestVerificationToken", document.querySelector("input[name='__RequestVerificationToken']").value);
+                    xhr.onload = function () {
+                        if (this.status == 200) {
+                            var response = JSON.parse(xhr.responseText);
+                            if (response.success) {
+                                productCountElement.dataset.count = response.item.count;
+                                productCountElement.value = response.item.count;
+                                orderTotalElement.dataset.ordertotal = Number(orderTotalElement.dataset.ordertotal) - ((count * response.item.price) - (response.item.price * response.item.count));
+                                orderTotalElement.textContent = formatter.format(Number(orderTotalElement.dataset.ordertotal));
+                                document.querySelector(".validation-summary-valid").innerHTML = "";
+                            }
+                            else {
+                                productCountElement.value = count;
+                                const newHtmlElement = `<ul><li>${response.message}</li></ul>`;
+                                document.querySelector(".validation-summary-valid").innerHTML = newHtmlElement;
+                            }
+                        }
+                    }
+                    xhr.send();
+                }
+                else
+                {
+                    productCountElement.value = count ;
+                }
+            });
+        }
+        function WhenRemovesProducts(id, orderTotal) {
+            var childToRemove = document.querySelector("#cart_element_" + id);
+            document.querySelector(".parent").removeChild(childToRemove);
+            if (orderTotal == 0) {
+                document.querySelector("#emptybasket").style.display = "block";
+                document.querySelector("#shoppingCartForm").style.display = "none";
+            }
+        }
+    </script>
+}
+
+
+

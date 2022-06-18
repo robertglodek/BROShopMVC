@@ -1,0 +1,170 @@
+﻿
+@using BRO.Domain.Utilities.PaginationSearchByRules
+@model BRO.UI.ViewModels.PagedResultViewModel<BRO.Domain.Query.DTO.Product.ProductDTO>
+@{
+    var photoPath = "~/images/products/";
+}
+
+
+
+<div class="row align-items-center mb-5 mt-5">
+    <div class="col-6">
+        <h3 class="text-secondary m-0 ">@Model.SearchValue?.ToUpper()</h3>
+    </div>
+    <div class="col-6  text-end">
+
+    </div>
+</div>
+
+<div class="row mb-5 align-items-center">
+    <div class="col-12 col-lg-4 p-0 m-0 text-lg-center text-start ">
+    </div>
+    <div class="col-12 col-lg-4 p-0 m-lg-0 text-lg-center text-end mt-4 pe-sm-0 pe-3">
+        Pokaż
+        <select class="customSelect text-secondary border-secondary " asp-items='Model.PageSizes' onchange='ChangePageSize("Customer", "Home", "Index", this, "@Model.SearchValue", "@Model.SearchName", "@Model.Result.SortBy")'>
+        </select>
+    </div>
+    <div class="col-12 col-lg-4 p-0 m-0 mt-4 m-lg-0 text-lg-center text-end pe-sm-0 pe-3">
+        Sortuj
+        <select class="customSelect text-secondary border-secondary " id="sortingElement" asp-items='Model.Sorting' onchange='ChangeSorting("Customer", "Home", "Index", this, "@Model.SearchValue", "@Model.SearchName", "@Model.Result.CurrentPage", "@Model.Result.PageSize")'>
+        </select>
+    </div>
+</div>
+
+
+<div class="row">
+    @if (@Model.Result.PageElements.Any())
+    {
+
+        @foreach (var product in Model.Result.PageElements)
+        {
+            <div class="col-sm-6 col-md-4 col-lg-3 mt-2   ">
+                <a asp-action="Details" asp-area="Customer" asp-controller="Home" asp-route-id="@product.Id" class="d-block card-item">
+                    <div class="card   ">
+                        <div class="card-body bg-light">
+                            <div><img src="@photoPath@product.ImageUrlMain" class="card-img-top mb-0 p-0 img-fluid" asp-append-version="true"> </div>
+                        </div>
+                        <div class="card-body bg-light mt-0 pt-1  text-center">
+                            <div class="mb-1 mt-0 pt-0">
+                                @{
+                                    string prodName;
+                                    if (product.Name.Length > 10)
+                                    {
+                                        prodName = product.Name.Substring(0, 9) + "..";
+                                    }
+                                    else
+                                    {
+                                        prodName = product.Name;
+                                    }
+                                }
+                                <h3 class="font-weight-semibold mb-1 text-dark  ">@prodName</h3>
+                            </div>
+                            <div class="mb-1">
+                                <h6 class="font-weight-semibold mb-1 text-dark ">@product.Manufacturer.Name</h6>
+                            </div>
+
+                            @if (product.IsDiscount == true)
+                            {
+
+                                <h4 class="mb-0 font-weight-semibold text-warning d-inline">@product.PromotionalPrice.ToString("C")</h4>
+                                <h4 class="mb-3 font-weight-semibold text-dark d-inline"><strike>@product.RegularPrice.ToString("C")</strike> </h4>
+                            }
+                            else
+                            {
+                                <h4 class="mb-0 font-weight-semibold text-dark  "> @product.RegularPrice.ToString("C")</h4>
+                            }
+                            <div>
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    if (product.Rating >= i)
+                                    {
+
+
+                                        <i class="fas fa-star fa-sm text-primary"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="far fa-star fa-sm text-primary"></i>
+
+                                    }
+
+
+                                }
+                                <span class=" text-dark align-middle">@product.ReviewsNumber ocen</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+        }
+
+
+    }
+    else
+    {
+        <div class="px-5">
+            <div class="border-2 border-secondary border row text-center mt-4 align-items-center p-2">
+                <p class="fs-5 m-0 text-secondary">Brak produktów !!</p>
+            </div>
+        </div>
+    }
+
+
+</div>
+
+<div class="container mt-3">
+    @if (Model.Result.TotalPages > 1 && Model.Result.PageElements.Count() > 0)
+    {
+        <ul class="pagination justify-content-center  mb-0">
+            @if (Model.Result.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link text-secondary" href="@Url.Action("Index","Home",new {PageNumber=1, SearchName=Model.SearchName,SearchValue=Model.SearchValue, PageSize=Model.Result.PageSize, SortBy=Model.Result.SortBy })">Pierwsza</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link text-secondary" href="@Url.Action("Index","Home",new {PageNumber=Model.Result.CurrentPage-1, SearchName=Model.SearchName,SearchValue=Model.SearchValue, PageSize=Model.Result.PageSize, SortBy=Model.Result.SortBy })">Poprzednia</a>
+                </li>
+            }
+            @for (var p = Model.Result.StartPage; p <= Model.Result.EndPage; p++)
+            {
+                <li class="page-item">
+                    <a class="page-link @(p==Model.Result.CurrentPage?"bg-warning":"")" href="@Url.Action("Index","Home",new {PageNumber=p, SearchName=Model.SearchName,SearchValue=Model.SearchValue, PageSize=Model.Result.PageSize, SortBy=Model.Result.SortBy })">@p </a>
+                </li>
+            }
+            @if (Model.Result.CurrentPage < Model.Result.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index","Home",new {PageNumber=Model.Result.CurrentPage+1, SearchName=Model.SearchName,SearchValue=Model.SearchValue, PageSize=Model.Result.PageSize, SortBy=Model.Result.SortBy })">Następna</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index","Home",new {PageNumber=Model.Result.TotalPages, SearchName=Model.SearchName,SearchValue=Model.SearchValue, PageSize=Model.Result.PageSize, SortBy=Model.Result.SortBy})">Ostatnia</a>
+                </li>
+            }
+        </ul>
+    }
+</div>
+
+<partial name="_ActionPerformedResultPartial" />
+
+@section Scripts
+{
+    <partial name="_ActionPerformedResultScriptsPartial" />
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

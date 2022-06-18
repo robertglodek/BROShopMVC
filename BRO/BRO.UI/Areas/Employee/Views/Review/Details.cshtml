@@ -1,0 +1,80 @@
+﻿@model BRO.Domain.Query.DTO.Review.ReviewDTO
+
+<div class="row align-items-center mb-2 mt-5">
+    <div class="col-6">
+        <h3 class="text-secondary m-0 text-uppercase ">Szczegóły recenzji</h3>
+    </div>
+    <div class="col-6  text-end">
+
+    </div>
+</div>
+<div class="row p-3 border"> 
+    <div class="col-12 col-md-8 pt-0 text-secondary ">
+    
+        <div class="form-group row align-items-center ">
+            <div class="col-sm-4 col-12">
+                <label>Email użytkownika</label>
+            </div>
+            <div class="col-sm-8 col-12">
+                <span class="text-break text-dark">@Model.User.Email</span>
+            </div>
+        </div>
+        <div class="form-group row align-items-center mt-3 ">
+            <div class="col-sm-4 col-12">
+                <label>Nazwa produktu</label>
+            </div>
+            <div class="col-sm-8 col-12">
+                <span class="text-dark">@Model.Product.Name</span>
+            </div>
+        </div>
+        <div class="form-group row align-items-center mt-3 ">
+            <div class="col-sm-4 col-12">
+                <label>Data publikacja</label>
+            </div>
+            <div class="col-sm-8 col-12">
+                <span class="text-dark">@Model.PublishDateTime.ToLocalTime().ToString("MM/dd/yyyy")</span>
+            </div>
+        </div>
+        <div class="form-group row align-items-center mt-3">
+            <div class="col-sm-4 col-12">
+                <label>Ocena</label>
+            </div>
+            <div class="col-sm-8 col-12">
+                @for (int i = 1; i <= 5; i++)
+                {
+                    if (Model.Rating >= i)
+                    {
+                        <i class="fas fa-star fa-sm text-primary"></i>
+                    }
+                    else
+                    {
+                        <i class="far fa-star fa-sm text-primary"></i>
+                    }
+                }
+            </div>
+        </div>
+        <div class="form-group row align-items-center mt-3 ">
+            <div class="col-sm-4 col-12">
+                <label>Szczegółowa ocena</label>
+            </div>
+            <div class="col-sm-8 col-12">
+                <span class="text-dark">@Model.Content</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<div>
+    <p>
+        
+    </p>
+</div>
+<p>
+    
+</p>
+

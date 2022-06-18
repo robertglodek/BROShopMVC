@@ -1,0 +1,32 @@
+﻿@model  List<BRO.Domain.Query.DTO.Carrier.CarrierDTO>
+
+@{
+    ViewData["Title"] = "Metody dostawy";
+
+}
+
+<div class="row align-items-center mb-3 mt-5">
+    <div class="col-11 col-md-6">
+        <h3 class="text-secondary m-0">Oferowani dostawcy</h3>
+    </div>
+    <div class="col-1 col-md-6">
+       
+    </div>
+</div>
+
+<div class="mt-0">
+    <div class="mt-2">
+        @foreach (var carrier in Model)
+        {
+        <p class="my-3"><i class="far fa-thumbs-up text-warning"></i><span class="ms-2">@carrier.Name, (koszt dostawy @carrier.ShippingCost.ToString("C"),  darmowa dostawa od @carrier.FreeShippingFromPrice.ToString("C"))</span></p>
+        }
+    </div>
+    <div class="mt-4">
+        <span>
+            Wiemy, jak ważne jest dla państwa otrzymanie paczki na czas, dokładamy wszelkich starań, aby paczka dotarła tak szybko, jak to możliwe.
+            W ramach każdej z metod oferujemy darmową dostawę, wystarczy, że łączna wartość zakupionych produktów przekroczy podany dla danego dostawcy próg.
+            W przypadku podania prawidłowego numeru telefonu podczas finalizacji zamówienia kurier, w razie problemów,
+            może skontaktować się z odbiorcą w celu dostarczenia produktu.
+        </span>
+    </div>
+</div>

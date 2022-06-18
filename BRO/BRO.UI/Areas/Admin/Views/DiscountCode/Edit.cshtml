@@ -1,0 +1,85 @@
+﻿@model BRO.Domain.Command.DiscountCode.EditDiscountCodeCommand
+@{
+    ViewData["Title"] = "Edytuj kod zniżkowy";
+}
+
+<form method="post" class="mt-5">
+    <div asp-validation-summary="ModelOnly" class="text-danger val  mb-2 ms-0 p-0"></div>
+    <input asp-for="Id" hidden readonly />
+    <div class="row p-3 border">
+        <div class="col-12 border-bottom ">
+            <h2 class="text-secondary">@ViewData["Title"]</h2>
+        </div>
+        <div class="col-12 col-md-8 pt-4">
+            <div class="form-group row align-items-center text-secondary">
+                <div class="col-sm-4 col-12">
+                    <label asp-for="@Model.CodeName"></label>
+                </div>
+                <div class="col-sm-8 col-12">
+                    <input asp-for="@Model.CodeName" class="form-control" />
+                    <span asp-validation-for="@Model.CodeName" class="text-danger">
+                    </span>
+                </div>
+            </div>
+            <div class="form-group row align-items-center text-secondary mt-3">
+                <div class="col-sm-4 col-12">
+                    <label asp-for="@Model.DiscountInPercent"></label>
+                </div>
+                <div class="col-sm-8 col-12">
+                    <input asp-for="@Model.DiscountInPercent" class="form-control" />
+                    <span asp-validation-for="@Model.DiscountInPercent" class="text-danger">
+                    </span>
+                </div>
+            </div>
+            <div class="form-group row align-items-center text-secondary mt-3">
+                <div class="col-sm-4 col-12">
+                    <label asp-for="@Model.MinimumOrderPrice"></label>
+                </div>
+                <div class="col-sm-8 col-12">
+                    <input asp-for="@Model.MinimumOrderPrice" class="form-control" />
+                    <span asp-validation-for="@Model.MinimumOrderPrice" class="text-danger">
+                    </span>
+                </div>
+            </div>
+            <div class="form-group row align-items-center text-secondary mt-3">
+                <div class="col-sm-4 col-12">
+                    <label asp-for="@Model.NumberOfUsesLeft"></label>
+                </div>
+                <div class="col-sm-8 col-12">
+                    <input asp-for="@Model.NumberOfUsesLeft" class="form-control" />
+                    <span asp-validation-for="@Model.NumberOfUsesLeft" class="text-danger">
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group row align-items-center text-secondary mt-3">
+                <div class="col-sm-4 col-12">
+                    <label asp-for="@Model.CodeAvailabilityEnd"></label>
+                </div>
+                <div class="col-sm-8 col-12">
+                    <input asp-for="@Model.CodeAvailabilityEnd" type="datetime-local" class="form-control" />
+                    <span asp-validation-for="@Model.CodeAvailabilityEnd" class="text-danger">
+                    </span>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-12 col-md-8 offset-md-4">
+                    <div class="row">
+                        <div class=" col-12 col-md-6 ">
+                            <button type="submit" class="btn btn-outline-warning form-control">Edytuj</button>
+                        </div>
+                        <div class="col-12 col-md-6 mt-1 mt-md-0">
+                            <a asp-action="Index" class="btn btn-outline-secondary form-control">Powrót</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+   
+} 

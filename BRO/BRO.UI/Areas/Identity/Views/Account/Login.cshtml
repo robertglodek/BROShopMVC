@@ -1,0 +1,57 @@
+﻿@model BRO.UI.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "Logowanie";
+}
+<div class="row">
+    <div class="col-12 col-md-6 col-lg-4   offset-lg-2  mt-5  p-4 border-1 border ">
+        <h2 class="text-dark text-center mb-3">@ViewData["Title"]</h2>
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger val mt-3 mb-0 ms-0 p-0">   </div>
+            <div>
+                <label asp-for="Command.Email" class="text-secondary my-2"  ></label>
+                <input asp-for="Command.Email" class="form-control bg-light "  />
+                <span asp-validation-for="Command.Email" class="text-danger"></span>
+            </div>
+            <div class="mt-4">
+                <label asp-for="Command.Password" class="text-secondary  my-2"></label>
+                <input asp-for="Command.Password"  class="form-control bg-light " />
+                <span asp-validation-for="Command.Password" class="text-danger"></span>
+            </div>
+            <div class="row mt-4">
+                <div class="col-5">
+                    <button type="submit" class="btn btn-outline-warning form-control" asp-route-returnUrl="@Model.ReturnUrl">Zaloguj</button>
+                </div>
+                <div class="col-7 text-end">
+                    <label class="text-secondary  ">
+                        <input asp-for="Command.RememberMe" />
+                        <label asp-for="Command.RememberMe"></label>
+                    </label>
+                </div>
+                <div class="col-12 mt-4"> 
+                    <p class="text-center mt-2">
+                        <a id="forgot-password" class="text-secondary" asp-action="ForgotPassword">Przypomnij hasło</a>
+                    </p>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4  mt-0 mt-md-5  p-4 border-1 border  ">
+        <h2 class="text-center text-dark mb-3 ">Rejestracja</h2>
+        <p class="text-secondary">Co otrzymasz po założeniu konta?</p>
+        <ul class="mt-4 ps-3">
+            <li><i class="far fa-thumbs-up text-warning"></i><span class="text-secondary ps-1">możliwość zakupu produktów</span></li>
+            <li class="mt-2"><i class="far fa-thumbs-up text-warning"></i><span class="text-secondary ps-1">podgląd historii zakupów</span></li>
+            <li class="mt-2"><i class="far fa-thumbs-up text-warning"></i><span class="text-secondary ps-1">możliwość oceniania produktów</span></li>
+        </ul>
+        <div class="mt-4">
+            <p class="text-secondary" >To potrwa tylko chwilkę !!</p>
+            <div>
+                <a asp-action="Register" class="btn btn-outline-warning form-control">Zarejestruj się</a>
+            </div>      
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

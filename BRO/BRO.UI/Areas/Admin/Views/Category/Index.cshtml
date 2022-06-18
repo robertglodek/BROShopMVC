@@ -1,0 +1,139 @@
+﻿@using BRO.Domain.Utilities.PaginationSearchByRules
+@model BRO.UI.ViewModels.PagedResultViewModel<CategoryDTO>
+@{
+    var searchBy = new CategorySearchByRules().SearchByList.FirstOrDefault();
+    int index = Model.Result.ElementsFrom - 1;
+}
+
+<div class="row align-items-center mb-2 mt-5">
+    <div class="col-6">
+        <h3 class="text-secondary m-0 text-uppercase ">Kategorie</h3>
+    </div>
+    <div class="col-6  text-end">
+        <a class="btn btn-outline-warning" asp-action="Add">Dodaj kategorię</a>
+    </div>
+</div>
+<div class="row mb-5 align-items-center">
+    <div class="col-12 col-lg-4  m-0 text-lg-center text-start pl12 ">
+        <form asp-action="Index" method="get">
+            <span class="btn-group">
+                <input class="p-1 form-control" type="text" name="SearchValue" placeholder="Nazwa kategorii" />
+                <input type="text" name="SearchName" value="@searchBy" hidden />
+                <button type="submit" class="p-1 btn btn-outline-warning ">Szukaj</button>
+            </span>
+        </form>
+    </div>
+    <div class="col-12 col-lg-4 p-0 m-lg-0  text-lg-center text-end mt-4  pe-sm-0 pe-3 ">
+        Pokaż
+        <select class="customSelect text-secondary border-secondary " asp-items='Model.PageSizes' onchange='ChangePageSize("Admin", "Category", "Index", this, "@Model.SearchValue", "@Model.SearchName", "@Model.Result.SortBy")'>
+        </select>
+    </div>
+    <div class="col-12 col-lg-4 p-0 m-0  mt-4  m-lg-0   text-lg-center text-end pe-sm-0 pe-3 ">
+        Sortuj
+        <select class="customSelect text-secondary border-secondary " id="sortingElement" asp-items='Model.Sorting' onchange='ChangeSorting("Admin", "Category", "Index", this, "@Model.SearchValue", "@Model.SearchName", "@Model.Result.CurrentPage", "@Model.Result.PageSize")'>
+        </select>
+    </div>
+</div>
+@if (@Model.Result.PageElements.Any())
+{
+    <div>
+        <table class="table tb table-striped">
+            <thead class="tab-pane">
+                <tr>
+                    <th scope="col">Nr</th>
+                    <th scope="col">Nazwa</th>
+                    <th scope="col">Szczegóły</th>
+                    <th scope="col">Usuwanie</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Result.PageElements)
+                {
+                    index = index + 1;
+
+                    <tr>
+                        <td data-label="Nr">
+                            @index
+                        </td>
+                        <td data-label="Nazwa">
+                            @item.Name
+                        </td>
+
+                        <td data-label="Szczegóły">
+                            <a class="text-secondary " asp-action="Edit" asp-route-Id="@item.Id">Edytuj</a>
+                        </td>
+                        <td data-label="Usuwanie">
+                            <span onclick="ToggleDeleteConfirmWindow(true,'@item.Id')" class="text-secondary btnRemove ">Usuń</span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="border-2 border-secondary border row text-center mt-4 align-items-center p-2 mx-md-0 mx-3  ">
+        <p class="fs-5 m-0 text-secondary">Brak kategorii !!</p>
+    </div>
+}
+<div class="container">
+    @if (Model.Result.TotalPages > 1 && Model.Result.PageElements.Count() > 0)
+    {
+        <ul class="pagination justify-content-center  mb-0">
+            @if (Model.Result.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link text-secondary" href="@Url.Action("Index","Category",new {PageNumber=1, SearchName=Model.SearchName,SearchValue=Model.SearchValue, PageSize=Model.Result.PageSize, SortBy=Model.Result.SortBy })">Pierwsza</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link text-secondary" href="@Url.Action("Index","Category",new {PageNumber=Model.Result.CurrentPage-1, SearchName=Model.SearchName,SearchValue=Model.SearchValue, PageSize=Model.Result.PageSize, SortBy=Model.Result.SortBy })">Poprzednia</a>
+                </li>
+            }
+            @for (var p = Model.Result.StartPage; p <= Model.Result.EndPage; p++)
+            {
+                <li class="page-item ">
+                    <a class="page-link  @(p==Model.Result.CurrentPage?"bg-warning":"")" href="@Url.Action("Index","Category",new {PageNumber=p, SearchName=Model.SearchName,SearchValue=Model.SearchValue, PageSize=Model.Result.PageSize, SortBy=Model.Result.SortBy })">@p </a>
+                </li>
+            }
+            @if (Model.Result.CurrentPage < Model.Result.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index","Category",new {PageNumber=Model.Result.CurrentPage+1, SearchName=Model.SearchName,SearchValue=Model.SearchValue, PageSize=Model.Result.PageSize, SortBy=Model.Result.SortBy })">Następna</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index","Category",new {PageNumber=Model.Result.TotalPages, SearchName=Model.SearchName,SearchValue=Model.SearchValue, PageSize=Model.Result.PageSize, SortBy=Model.Result.SortBy})">Ostatnia</a>
+                </li>
+            }
+        </ul>
+    }
+</div>
+
+
+
+
+
+<div class="deleteConfirmationWrapper w-100 h-100 position-fixed   top-0 start-0  " style="display:none;z-index:5; background-color:rgba(0,0,0,0.4)">
+    <div class="row p-5  border position-fixed top-50 start-50 m-0 translate-middle deleteConfirmation bg-white">
+        <div class="col-12 pb-2  border-bottom  text-center">
+            <span class="text-secondary fs-3">Czy chcesz usunąć?</span>
+        </div>
+        <form method="post" asp-action="Delete" asp-controller="Category" asp-area="Admin" class="row mt-3">
+            <input hidden id="itemToDeleteId" name="Id" />
+            <div class="col-12 col-md-6">
+                <button type="submit" class="btn btn-outline-danger form-control">Usuń</button>
+            </div>
+            <div class="col-12 col-md-6 mt-3 mt-md-0">
+                <span onclick="ToggleDeleteConfirmWindow(false)" asp-action="Index"
+                      class="btn btn-outline-secondary form-control">Powrót</span>
+            </div>
+        </form>
+    </div>
+
+</div>
+<partial name="_ActionPerformedResultPartial" />
+
+@section Scripts
+{
+    <partial name="_ActionPerformedResultScriptsPartial" />
+}

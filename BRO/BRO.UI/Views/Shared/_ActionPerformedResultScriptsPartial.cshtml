@@ -1,0 +1,14 @@
+﻿<script>
+        const action_perform_element = document.querySelector(".action_perform");
+        let success_action_timeout;
+        action_perform_element.addEventListener("click", (event) => {
+            clearTimeout(success_action_timeout);
+            action_perform_element.classList.remove("action_perform_active")
+        })
+        function hideActionSuccess() {
+            action_perform_element.classList.remove("action_perform_active")
+        }
+        if (action_perform_element.classList.contains("action_perform_active")) {
+            success_action_timeout = setTimeout(hideActionSuccess, 3000)
+        }
+</script>

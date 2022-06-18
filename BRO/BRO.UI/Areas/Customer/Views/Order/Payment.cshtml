@@ -1,0 +1,244 @@
+﻿@model BRO.UI.ViewModels.OrderPaymentViewModel
+@using Microsoft.Extensions.Options
+@using static BRO.Domain.Utilities.StaticDetails.PaymentMethods
+@{
+    ViewData["Title"] = "Finalizacja zakupu";
+
+}
+<div class="row align-items-center mb-5 mt-5">
+    <div class="col-6">
+        <h3 class="text-secondary m-0 ">@ViewData["Title"]</h3>
+    </div>
+    <div class="col-6  text-end">
+    </div>
+</div>
+<form method="post" asp-action="PaymentSummary">
+    <div asp-validation-summary="ModelOnly" class="text-danger val mt-3 mb-2 ms-0 ps-0 "></div>
+    <input asp-for="Command.CarrierId" readonly hidden />
+    <input asp-for="Command.DiscountCodeId" readonly hidden />
+    <input asp-for="Carrier.Prepayment" readonly hidden />
+    <input asp-for="Command.OrderProductsTotal" readonly hidden />
+    <input asp-for="Command.OrderProductsTotalAfterDiscount" readonly hidden />
+    <input asp-for="Command.OrderShippingCost" readonly hidden />
+    <div>
+        <div class="card">
+            <div class="card-body">
+                <div class="rounded p-2">
+                    <div class="row">
+                        <div class="col-12 col-lg-6 pb-4">
+                            <div class="mb-3">
+                                <span class="text-secondary fs-5">Adres dostawy:</span>
+                            </div>
+                            <div class="row my-1 align-items-center">
+                                <div class="col-sm-5 col-12  ">
+                                    <label asp-for="Command.FirstName" class="text-secondary"></label>
+                                </div>
+                                <div class="col-sm-7 col-12 ">
+                                    <input asp-for="Command.FirstName " type="text" class="form-control" />
+                                    <span asp-validation-for="Command.FirstName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row my-1 align-items-center">
+                                <div class="col-sm-5 col-12">
+                                    <label asp-for="Command.LastName" class="text-secondary"></label>
+                                </div>
+                                <div class="col-sm-7 col-12">
+                                    <input asp-for="Command.LastName " type="text" class="form-control" />
+                                    <span asp-validation-for="Command.LastName" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="row my-1 align-items-center">
+                                <div class="col-sm-5 col-12">
+                                    <label asp-for="Command.PhoneNumber " class="text-secondary"></label>
+                                </div>
+                                <div class="col-sm-7 col-12">
+                                    <input asp-for="Command.PhoneNumber " type="text" class="form-control" />
+                                    <span asp-validation-for="Command.PhoneNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row my-1 align-items-center">
+                                <div class="col-sm-5 col-12">
+                                    <label asp-for="Command.Street" class="text-secondary"></label>
+                                </div>
+                                <div class="col-sm-7 col-12">
+                                    <input asp-for="Command.Street" type="text" class="form-control" />
+                                    <span asp-validation-for="Command.Street" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row my-1 align-items-center">
+                                <div class="col-sm-5 col-12">
+                                    <label asp-for="Command.City" class="text-secondary"></label>
+                                </div>
+                                <div class="col-sm-7 col-12">
+                                    <input asp-for="Command.City" type="text" class="form-control" />
+                                    <span asp-validation-for="Command.City" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row my-1 align-items-center">
+                                <div class="col-sm-5 col-12">
+                                    <label asp-for="Command.PostalCode" class="text-secondary"></label>
+                                </div>
+                                <div class="col-sm-7 col-12">
+                                    <input asp-for="Command.PostalCode" type="text" class="form-control" />
+                                    <span asp-validation-for="Command.PostalCode" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row my-1 align-items-center">
+                                <div class="col-sm-5 col-12">
+                                    <label asp-for="Command.UserDescription" class="text-secondary"></label>
+                                </div>
+                                <div class="col-sm-7 col-12">
+                                    <textarea asp-for="Command.UserDescription" class="form-control"></textarea>
+                                    <span asp-validation-for="Command.UserDescription" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6  ">
+                            <div class="mb-3 row">
+                                <div class="col-6">
+                                    <span class="text-secondary fs-5">Płatność:</span>
+                                </div>
+                                <div class="col-6">
+                                    <div class="  text-center">
+                                        <input type="checkbox" asp-for="Command.IsOrderBill" id="isOrderBill" class="form-check-input bg-warning" />
+                                        <label>Faktura</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="IsBillEnabledDisplay"  @(Model.Command.IsOrderBill==true?"":"style=display:none") >
+                                <div class="row my-1 align-items-center" >
+                                    <div class="col-sm-5 col-12 ">
+                                        <label asp-for="Command.OrderBillCommand.CompanyName " class="text-secondary"></label>
+                                    </div>
+                                    <div class="col-sm-7 col-12">
+                                        <input asp-for="Command.OrderBillCommand.CompanyName " type="text" class="form-control" />
+                                        <span asp-validation-for="Command.OrderBillCommand.CompanyName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row my-1 align-items-center">
+                                    <div class="col-sm-5 col-12">
+                                        <label asp-for="Command.OrderBillCommand.NIP" class="text-secondary"></label>
+                                    </div>
+                                    <div class="col-sm-7 col-12">
+                                        <input asp-for="Command.OrderBillCommand.NIP" type="text" class="form-control" />
+                                        <span asp-validation-for="Command.OrderBillCommand.NIP" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row my-1 align-items-center">
+                                    <div class="col-sm-5 col-12">
+                                        <label asp-for="Command.OrderBillCommand.Street" class="text-secondary"></label>
+                                    </div>
+                                    <div class="col-sm-7 col-12">
+                                        <input asp-for="Command.OrderBillCommand.Street" type="text" class="form-control" />
+                                        <span asp-validation-for="Command.OrderBillCommand.Street" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row my-1 align-items-center">
+                                    <div class="col-sm-5 col-12">
+                                        <label asp-for="Command.OrderBillCommand.City" class="text-secondary"></label>
+                                    </div>
+                                    <div class="col-sm-7 col-12">
+                                        <input asp-for="Command.OrderBillCommand.City" type="text" class="form-control" />
+                                        <span asp-validation-for="Command.OrderBillCommand.City" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row my-1 align-items-center">
+                                    <div class="col-sm-5 col-12">
+                                        <label asp-for="Command.OrderBillCommand.PostalCode" class="text-secondary"></label>
+                                    </div>
+                                    <div class="col-sm-7 col-12">
+                                        <input asp-for="Command.OrderBillCommand.PostalCode" type="text" class="form-control" />
+                                        <span asp-validation-for="Command.OrderBillCommand.PostalCode" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <ul class="list-group mb-3 mt-3" id="PaymentMethods">
+                                @if (Model.Carrier.Prepayment)
+                                {
+                                    <input id="paymentMethod" asp-for="Command.PaymentMethod" value="@PaymendMethodOnline" hidden />
+
+                                    <li class="list-group-item d-flex justify-content-between" data-paymentMethod="@PaymendMethodOnline" style="border:2px solid #ffc107;cursor:pointer">
+                                        <h6 class="my-0">@PaymendMethodOnline</h6>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between" data-paymentMethod="@PaymentMethodBankTransfer" style="cursor: pointer;">
+                                        <h6 class="my-0">@PaymentMethodBankTransfer</h6>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <input id="paymentMethod" asp-for="Command.PaymentMethod" value="@PaymendMethodOnDelivery" hidden />
+                                    <li class="list-group-item d-flex justify-content-between" data-paymentMethod="@PaymendMethodOnDelivery" style="border: 2px solid #ffc107; cursor: pointer;">
+                                        <h6 class="my-0">@PaymendMethodOnDelivery</h6>
+                                    </li>
+                                }
+                            </ul>
+                            @if (Model.Command.OrderProductsTotalAfterDiscount != null)
+                            {
+                                double total = (double)Model.Command.OrderProductsTotal+ (double)Model.Command.OrderShippingCost;
+                                double totalAfterDiscount = (double)Model.Command.OrderProductsTotalAfterDiscount + (double)Model.Command.OrderShippingCost;
+                                <div class="d-flex  align-items-center justify-content-end py-0 bg-light pe-2 ">
+                                    <strike>
+                                        <span class="text-dark pe-2 fs-6">Całkowity koszt:</span><span class="fs-4">@total.ToString("C")</span>
+                                    </strike>    
+                                </div>
+                                <div class="  mt-1 py-0 bg-light pe-2">
+                                    <div class="d-flex  align-items-center justify-content-end">
+                                        Zastosowany kod : @Model.DiscountCode.CodeName
+                                    </div>
+                                    <div class="d-flex  align-items-center justify-content-end">
+                                        <span class="text-dark pe-2 fs-6">Całkowity koszt ze zniżką:</span><span class="fs-4">@totalAfterDiscount.ToString("C")</span>
+                                    </div> 
+                                </div>
+                            } else
+                            {
+                                double total = (double)Model.Command.OrderProductsTotal + (double)Model.Command.OrderShippingCost;
+                                <div class="d-flex  align-items-center justify-content-end py-0 bg-light pe-2">
+                                    <span class="text-dark pe-2 fs-6">Całkowity koszt:</span><span id="orderTotal" class="fs-4">@total.ToString("C")</span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-12 col-md-3 ">
+                        <a asp-action="Delivery" class="btn btn-outline-warning form-control">Cofnij</a>
+                    </div>
+                    <div class="col-12 col-md-3 offset-md-6 mt-3 mt-md-0" >
+                        <button id="btn" type="submit" value="Place Order" class="btn btn-outline-danger form-control">Kupuję</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.getElementById("isOrderBill").addEventListener("change", (event) =>
+        {
+            if (event.target.checked == true) {
+
+                document.querySelector("#IsBillEnabledDisplay").style.display = "block";
+            }
+            else
+            {
+                document.querySelector("#IsBillEnabledDisplay").style.display = "none";
+            }
+        })
+        const paymentMethods = document.querySelectorAll("#PaymentMethods li");
+        paymentMethods.forEach(element => {
+            element.addEventListener("click", function (event)
+            { 
+                document.querySelector("#paymentMethod").value = this.dataset.paymentmethod;
+                document.querySelector("#paymentMethod").dataset.elo = this.dataset.paymentmethod;
+                paymentMethods.forEach(n => { n.style.border = "1px solid rgba(0,0,0,0.125)" });
+                this.style.border = "2px solid #ffc107";
+            });
+        })
+    </script>
+}

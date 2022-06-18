@@ -1,0 +1,126 @@
+﻿
+@model BRO.UI.ViewModels.EditCarrierViewModel
+@{
+    ViewData["Title"] = "Edytuj dostawcę produktu";
+    var photoPath = "~/images/carriers/";
+
+}
+<form method="post" enctype="multipart/form-data" class="mt-5">
+    <div asp-validation-summary="ModelOnly" class="text-danger val  mb-2 ms-0 p-0"></div>
+    <input asp-for="Command.Id" readonly hidden />
+    <input asp-for="Command.Image" readonly hidden />
+    <div class="row p-3 border">
+        <div class="col-12 border-bottom ">
+            <h2 class="text-secondary">@ViewData["Title"]</h2>
+        </div>
+        <div class="col-12 col-md-8 pt-4">
+            <div class="form-group row align-items-center text-secondary">
+                <div class="col-sm-4 col-12">
+                    <label asp-for="Command.Name"></label>
+                </div>
+                <div class="col-sm-8 col-12">
+                    <input asp-for="Command.Name" class="form-control" />
+                    <span asp-validation-for="Command.Name" class="text-danger">
+                    </span>
+                </div>
+            </div>
+            <div class="form-group row align-items-center text-secondary mt-3">
+                <div class="col-sm-4 col-12">
+                    <label asp-for="Command.DeliveryTimeScope"></label>
+                </div>
+                <div class="col-sm-8 col-12">
+                    <input asp-for="Command.DeliveryTimeScope" class="form-control" />
+                    <span asp-validation-for="Command.DeliveryTimeScope" class="text-danger">
+                    </span>
+                </div>
+            </div>
+            <div class="form-group row align-items-center text-secondary mt-3">
+                <div class="col-sm-4 col-12">
+                    <label asp-for="Command.ShippingCost"></label>
+                </div>
+                <div class="col-sm-8 col-12">
+                    <input asp-for="Command.ShippingCost" class="form-control" />
+                    <span asp-validation-for="Command.ShippingCost" class="text-danger">
+                    </span>
+                </div>
+            </div>
+            <div class="form-group row align-items-center text-secondary mt-3">
+                <div class="col-sm-4 col-12">
+                    <label asp-for="Command.FreeShippingFromPrice"></label>
+                </div>
+                <div class="col-sm-8 col-12">
+                    <input asp-for="Command.FreeShippingFromPrice" class="form-control" />
+                    <span asp-validation-for="Command.FreeShippingFromPrice" class="text-danger">
+                    </span>
+                </div>
+            </div>
+            <div class="form-group row align-items-center text-secondary mt-3">
+                <div class="col-4">
+                    <label asp-for="Command.IsAvailable"></label>
+                </div>
+                <div class="col-8 text-center">
+                    <input type="checkbox" asp-for="Command.IsAvailable" class="form-check-input bg-warning" />
+
+                </div>
+            </div>
+            <div class="form-group row align-items-center text-secondary mt-3">
+                <div class="col-4">
+                    <label asp-for="Command.Prepayment"></label>
+                </div>
+                <div class="col-8 text-center">
+                    <input type="checkbox" asp-for="Command.Prepayment" class="form-check-input bg-warning" />
+
+                </div>
+            </div>
+            <div class="form-group row align-items-center text-secondary mt-3">
+                <div class="col-sm-4 col-12">
+                    <label asp-for="Image"></label>
+                </div>
+                <div class="col-sm-8 col-12">
+                    <div class="mb-3">
+                        <input asp-for="Image" class="form-control" type="file" id="formFile">
+                        <span asp-validation-for="Image" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            @if (Model.Command.Image != null)
+            {
+                <img src="@photoPath@Model.Command.Image" class="imageThumbnail col-sm-6 offset-sm-6 rounded" asp-append-version="true" />
+            }
+            <div class="row mt-4">
+                <div class="col-12 col-md-8 offset-md-4">
+                    <div class="row">
+                        <div class=" col-12 col-md-6 ">
+                            <button type="submit" class="btn btn-outline-warning form-control">Edytuj</button>
+                        </div>
+                        <div class="col-12 col-md-6 mt-1 mt-md-0">
+                            <a asp-action="Index" class="btn btn-outline-secondary form-control">Powrót</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        const numberExcludeInputs = document.querySelectorAll(".noNumberValidation");
+        if (numberExcludeInputs.length > 0) {
+            numberExcludeInputs.forEach(n => {
+                n.removeAttribute("data-val-number");
+            })
+        }
+        $.validator.methods.range = function (value, element, param) {
+            var globalizedValue = value.replace(",", ".");
+            return this.optional(element) || (globalizedValue >= param[0] && globalizedValue <= param[1]);
+        }
+
+        $.validator.methods.number = function (value, element) {
+            return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:[\s\.,]\d{3})+)(?:\,\d+)?$/.test(value);
+        }
+    </script>
+} 

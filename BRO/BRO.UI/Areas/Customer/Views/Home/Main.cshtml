@@ -1,0 +1,277 @@
+﻿@model BRO.UI.ViewModels.MainPageViewModel
+@using BRO.Domain.Utilities.PaginationSearchByRules;
+
+@{
+
+    var searchRules = new ProductSearchByRules().SearchByList;
+    var photoPath = "~/images/products/";
+}
+
+<section>
+    <div class="">
+        <div class="row mt-5 position-relative slider-wrapper p-3 pb-0 bg-light  ">
+            <div class="active-slider slider-element p-0 ">
+                <a asp-action="Index" asp-controller="Home" asp-area="Customer" asp-route-SearchName="@searchRules[5]" asp-route-SearchValue="nvalley">
+                    <p class="slider text-uppercase bg-secondary text-white opacity-75 fs-1 position-absolute top-50 w-100 p-0 m-0 text-center mx-auto start-50">Proteinowa  przekąska</p>
+                    <img class="slider img-fluid rounded-3 " src="~/images/other/Nature-valley 1920x840.jpg" alt="">
+
+                </a>
+            </div>
+            <div class="slider-element p-0 ">
+                <a asp-action="Index" asp-controller="Home" asp-area="Customer" asp-route-SearchName="@searchRules[5]" asp-route-SearchValue="oreo">
+                    <p class="slider text-uppercase bg-secondary text-white  fs-1 opacity-75 position-absolute top-50 w-100 p-0 m-0 text-center mx-auto start-50">Na wspólne spotkanie</p>
+                    <img class="slider img-fluid  rounded-3" src="~/images/other/Oreo 1920x840.jpg" alt="">
+                </a>
+            </div>
+            <div class="slider-element p-0 ">
+                <a asp-action="Index" asp-controller="Home" asp-area="Customer" asp-route-SearchName="@searchRules[5]" asp-route-SearchValue="aware">
+                    <p class="slider text-uppercase bg-secondary text-white  fs-1 opacity-75 position-absolute top-50 w-100 p-0 m-0 text-center mx-auto start-50">Czas masowania</p>
+                    <img class="slider img-fluid  rounded-3" src="~/images/other/aware-whey 1920x840.jpg" alt="">
+                </a>
+            </div>
+            <div class="dots text-center">
+                <span class="active-dot dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="news-bestsellers-wrapper mt-4 row py-4 bg-light">
+        @if (@Model.Latest.Any())
+        {
+            <h3 class="text-secondary pt-3 mb-3 text-center text-uppercase">Najnowsze produkty</h3>
+
+            @foreach (var product in @Model.Latest)
+            {
+                <div class="col-sm-6 col-md-4 col-lg-3 mt-2    ">
+                    <a asp-action="Details" asp-area="Customer" asp-controller="Home" asp-route-id="@product.Id" class="d-block card-item">
+                        <div class="card   ">
+                            <div class="card-body bg-light">
+                                <div><img src="@photoPath@product.ImageUrlMain" class="card-img-top mb-0 p-0 img-fluid     " asp-append-version="true"> </div>
+                            </div>
+                            <div class="card-body bg-light mt-0 pt-1  text-center">
+                                <div class="mb-1 mt-0 pt-0">
+                                    @{
+                                        string prodName;
+                                        if (product.Name.Length > 10)
+                                        {
+                                            prodName = product.Name.Substring(0, 9) + "..";
+                                        }
+                                        else
+                                        {
+                                            prodName = product.Name;
+                                        }
+                                    }
+                                    <h3 class="font-weight-semibold mb-1 text-dark  ">@prodName</h3>
+                                </div>
+                                <div class="mb-1">
+                                    <h6 class="font-weight-semibold mb-1 text-dark ">@product.Manufacturer.Name</h6>
+                                </div>
+
+                                @if (product.IsDiscount == true)
+                                {
+
+                                    <h4 class="mb-0 font-weight-semibold text-warning d-inline">@product.PromotionalPrice.ToString("C")</h4>
+                                    <h4 class="mb-3 font-weight-semibold text-dark d-inline"><strike>@product.RegularPrice.ToString("C")</strike> </h4>
+                                }
+                                else
+                                {
+                                    <h4 class="mb-0 font-weight-semibold text-dark  "> @product.RegularPrice.ToString("C")</h4>
+                                }
+                                <div>
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        if (product.Rating >= i)
+                                        {
+
+
+                                            <i class="fas fa-star fa-sm text-primary"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="far fa-star fa-sm text-primary"></i>
+
+                                        }
+
+
+                                    }
+                                    <span class=" text-secondary align-middle">@product.ReviewsNumber ocen</span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+            }
+
+
+        }
+
+        @if (@Model.Bestsellers.Any())
+        {
+            <h3 class=" pt-5 mb-3 text-center text-secondary text-uppercase">Bestsellery</h3>
+
+            @foreach (var productTaste in @Model.Bestsellers)
+            {
+                <div class="col-sm-6 col-md-4 col-lg-3 mt-2   ">
+                    <a asp-action="Details" asp-area="Customer" asp-controller="Home" asp-route-id="@productTaste.Product.Id" class="d-block card-item">
+                        <div class="card   ">
+                            <div class="card-body bg-light">
+                                <div><img src="@photoPath@productTaste.Product.ImageUrlMain" class="card-img-top mb-0 p-0 img-fluid     " asp-append-version="true"> </div>
+                            </div>
+                            <div class="card-body bg-light mt-0 pt-1  text-center">
+                                <div class="mb-1 mt-0 pt-0">
+                                    @{
+                                        string prodName;
+                                        if (productTaste.Product.Name.Length > 10)
+                                        {
+                                            prodName = productTaste.Product.Name.Substring(0, 9) + "..";
+                                        }
+                                        else
+                                        {
+                                            prodName = productTaste.Product.Name;
+                                        }
+                                    }
+                                    <h3 class="font-weight-semibold mb-1 text-dark  ">@prodName</h3>
+                                </div>
+                                <div class="mb-1">
+                                    <h6 class="font-weight-semibold mb-1 text-dark ">@productTaste.Product.Manufacturer.Name</h6>
+                                </div>
+                                 <div class="mb-1">
+                                    <h6 class="font-weight-semibold mb-1 text-dark ">@productTaste.Taste.Name</h6>
+                                </div>
+
+                                @if (productTaste.Product.IsDiscount == true)
+                                {
+
+                                    <h4 class="mb-0 font-weight-semibold text-warning d-inline">@productTaste.Product.PromotionalPrice.ToString("C")</h4>
+                                    <h4 class="mb-3 font-weight-semibold text-dark d-inline"><strike>@productTaste.Product.RegularPrice.ToString("C")</strike> </h4>
+                                }
+                                else
+                                {
+                                    <h4 class="mb-0 font-weight-semibold text-dark  "> @productTaste.Product.RegularPrice.ToString("C")</h4>
+                                }
+                                <div>
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        if (productTaste.Product.Rating >= i)
+                                        {
+                                            <i class="fas fa-star fa-sm text-primary"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="far fa-star fa-sm text-primary"></i>
+                                        }
+                                    }
+                                    <span class=" text-secondary align-middle">@productTaste.Product.ReviewsNumber ocen</span>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+            }
+
+
+        }
+
+
+
+
+        <div>
+            <h3 class="text-secondary pt-3 mb-3 text-center text-uppercase">O sklepie</h3>
+
+            <p class="mt-2 text-center px-3 mx-md-5 ">
+
+
+                Witaj w naszym sklepie, możesz u nas kupić nie tylko suplementy, ale również smaczne przekąski czy zaspokajające pragnienie napoje.
+                Oferujemy wiele produktów pochodzących zarówno z rynku Europejskiego, jak i z USA.
+                Powodzenia w zakupach, w razie problemów prosimy o odwiedzenie sekcji pomocy lub kontakt z nami pod adresem BROShops@outlook.com.
+            </p>
+
+        </div>
+
+    </div>
+
+
+</section>
+
+<partial name="_ActionPerformedResultPartial" />
+
+
+@section Scripts
+{
+
+    <partial name="_ActionPerformedResultScriptsPartial" />
+    <script>
+
+        const sliderElements = document.querySelectorAll(".slider-element");
+        const sliderDots = [...document.querySelectorAll(".dot")];
+
+
+
+
+        const time = 4000;
+
+        let active = 0
+
+        const changeSlide = () => {
+            active++;
+
+            if (active == sliderElements.length) {
+                active = 0;
+                sliderElements[sliderElements.length - 1].classList.remove("active-slider")
+                sliderElements[active].classList.add("active-slider")
+
+
+                sliderDots[sliderElements.length - 1].classList.remove("active-dot")
+                sliderDots[active].classList.add("active-dot")
+
+            }
+            if (active != 0) {
+                sliderElements[active - 1].classList.remove("active-slider")
+                sliderElements[active].classList.add("active-slider")
+
+
+                sliderDots[active - 1].classList.remove("active-dot")
+                sliderDots[active].classList.add("active-dot")
+            }
+
+
+
+        }
+
+        let indexInterval = setInterval(changeSlide, time)
+
+        sliderDots.forEach((n, index) => {
+            n.addEventListener("click", () => {
+                clearInterval(indexInterval)
+
+                const activeDot = sliderDots.findIndex(dot => dot.classList.contains('active-dot'));
+
+                sliderElements[activeDot].classList.remove("active-slider")
+                sliderDots[activeDot].classList.remove("active-dot")
+
+                sliderElements[index].classList.add("active-slider")
+                sliderDots[index].classList.add("active-dot")
+
+                active = index;
+
+
+
+
+                indexInterval = setInterval(changeSlide, time)
+
+            })
+        })
+
+
+
+    </script>
+
+}

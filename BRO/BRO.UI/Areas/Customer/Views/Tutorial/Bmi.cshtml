@@ -1,0 +1,130 @@
+﻿
+@{
+    ViewData["Title"] = "Kalkulator BMI";
+}
+<div class="row align-items-center mb-5 mt-5">
+    <div class="col-6">
+        <h3 class="text-secondary m-0 ">Kalkulator BMI</h3>
+    </div>
+    <div class="col-6  text-end">
+    </div>
+</div>
+<section class="row">
+    <div class="col-md-6 offset-md-3  p-3 ">  
+        <div class="d-flex mt-4">
+            <div class="w-100 px-2">
+                <label class="text-secondary">Waga w kg</label>
+                <input  id="weight-input" class="form-control"  type="number" value="0"/>
+                <span id="weight-error" class="text-danger " ></span>
+            </div>
+            <div class="w-100 px-2">
+                <label  class="text-secondary">Wzrost w m</label>
+                <input id="height-input" class="form-control"  type="number" value="0" />
+                <span id="height-error" class="text-danger"></span>
+            </div>       
+        </div>
+        <div class="my-3">
+            <span class="text-dark fw-bold ps-2" id="bmi-value"></span>
+        </div>
+        <button id="checkBmi-button" class="btn btn-outline-warning w-50 mt-4 mx-auto d-block">Oblicz</button>
+    </div>
+    <div class="mt-2">
+        <h4 class="text-dark">Czym jest BMI?</h4>
+        <p>
+            BMI (body mass index) określa wzór, za pomocą którego możemy określić zawartość tkanki tłuszczowej w organizmie na podstawie
+            proporcji masy ciała mierzone w kilogramach do wzrostu w metrach do kwadratu. Wskaźnik ten wykorzystywany jest w celu oceny ewentualnego ryzyka pojawienia się chorób powiązanych ze zbyt niskim lub zbyt wysokim współczynnikiem.
+            Może być on wykorzystywany do szacowania ryzyka wystąpienia m.in. udaru mózgu, chorób układu sercowego.
+        </p>
+    </div>
+    <div class="mt-2">
+        <h4 class="text-dark">Przedziały wskaźnika</h4>
+        <div>
+            <table class="table  table-striped">
+                <thead class="tab-pane">
+                    <tr>
+                        <th scope="col">Wartość</th>
+                        <th scope="col">Oznaka</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            BMI < 18,50
+                        </td>
+                        <td>
+                            Niedowaga
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            18,50 ≤ BMI ≤ 24,99
+                        </td>
+                        <td>
+                            Prawidłowa waga
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            25,00 ≤ BMI ≤ 29,99
+                        </td>
+                        <td>
+                            Nadwaga
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            BMI > 30,00
+                        </td>
+                        <td>
+                            Otyłość
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="mt-4">
+            <h4 class="text-dark">Wzór</h4>
+            <p>
+                BMI = masa(kg) / wzrost(m) * wzrost(m)
+            </p>
+        </div>
+</section>
+
+
+
+@section Scripts
+{
+<script>
+    const weightInput = document.querySelector("#weight-input");
+    const heightInput = document.querySelector("#height-input");
+    const weightError = document.querySelector("#weight-error");
+    const heightError = document.querySelector("#height-error");
+    const bmiValue = document.querySelector("#bmi-value");
+    bmiValue.parentNode.style.display = "none"
+    document.querySelector("#checkBmi-button").addEventListener("click", () =>
+    {
+        let failed = false;
+        bmiValue.parentNode.style.display = "none";
+        if (weightInput.value < 20 || weightInput.value > 500 ) {
+            weightError.textContent = "Nieprawidłowe dane";
+            failed = true;
+        }
+        else
+            weightError.textContent = "";
+        if (heightInput.value < 0.20 || heightInput.value > 2.50 )
+        {
+            heightError.textContent = "Nieprawidłowe dane";
+            failed = true;
+        }
+        else
+            heightError.textContent = "";
+        if (failed == false)
+        {
+            let value = (Number(weightInput.value) / (((Number(heightInput.value) * Number(heightInput.value)))))
+            bmiValue.parentNode.style.display = "block"
+            bmiValue.textContent = "BMI wynosi : " + value.toFixed(2);
+        }
+    })
+</script>
+}

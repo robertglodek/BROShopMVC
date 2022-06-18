@@ -1,0 +1,57 @@
+﻿
+@model BRO.Domain.Command.ProductTaste.EditProductQuantityCommand
+@{
+    ViewData["Title"] = "Magazyn produktu";
+
+
+}
+<form method="post" enctype="multipart/form-data" class="mt-5">
+    <div asp-validation-summary="ModelOnly" class="text-danger val  mb-2 ms-0 p-0"></div>
+    <input asp-for="@Model.ProductConcurrencyStamp"  hidden />
+    <input asp-for="@Model.ProductId"  hidden />
+    <div class="row p-3 border">
+        <div class="col-12 border-bottom ">
+            <h2 class="text-secondary">@ViewData["Title"]</h2>
+        </div>
+
+        @for (int i = 0; i < Model.ProductTastes.Count(); i++)
+        {
+            <div class="col-md-8 mt-3 ">
+                <input asp-for="@Model.ProductTastes[i].Id" hidden readonly />
+                <input asp-for="@Model.ProductTastes[i].ProductId" hidden readonly />
+                <input asp-for="@Model.ProductTastes[i].TasteId" hidden readonly />
+
+                <div class="form-group row">
+                    <div class="col-sm-4 col-12">
+                        <label>@Model.ProductTastes[i].Taste.Name</label>
+                    </div>
+                    <div class="col-sm-8 col-12">
+                        <input asp-for="@Model.ProductTastes[i].InStock" class="form-control" />
+                        <span asp-validation-for="@Model.ProductTastes[i].InStock" class="text-danger"></span>
+                    </div>
+                </div>
+
+            </div>
+
+        }
+        <div class="col-12 col-md-8 pt-4">
+            <div class="row mt-4">
+                <div class="col-12 col-md-8 offset-md-4">
+                    <div class="row">
+                        <div class=" col-12 col-md-6 ">
+                            <button type="submit" class="btn btn-outline-warning form-control">Edytuj</button>
+                        </div>
+                        <div class="col-12 col-md-6 mt-1 mt-md-0">
+                            <a asp-action="Index" class="btn btn-outline-secondary form-control">Powrót</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="BRO.Domain.Entities.ApplicationUser">
+    <Position X="12.75" Y="0.5" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAEAAEABAQAAAAAIIAAIAAAAAAAAAAgAAAIBAAAAIAg=</HashCode>
+      <FileName>Entities\ApplicationUser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BRO.Domain.Entities.Carrier">
+    <Position X="9.75" Y="3.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAECAAAAAAAAAAAAAAAACAQAIBAAABAAAAAAAIAAEAA=</HashCode>
+      <FileName>Entities\Carrier.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BRO.Domain.Entities.Category">
+    <Position X="0.5" Y="2.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Entities\Category.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BRO.Domain.Entities.Comment">
+    <Position X="9.75" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>EAADAAAIAgAAAAAAIAAAAAgBAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Comment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BRO.Domain.Entities.DiscountCode">
+    <Position X="15.25" Y="4.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAEGAABgAAAAAAAAAAAAAIAQAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\DiscountCode.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BRO.Domain.Entities.Manufacturer">
+    <Position X="7" Y="7.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Entities\Manufacturer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BRO.Domain.Entities.OrderBill">
+    <Position X="7" Y="5.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAECQAAAAAAAAAAIIAAAAAAAAAAAAAAAAAIAAAAAAAI=</HashCode>
+      <FileName>Entities\OrderBill.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BRO.Domain.Entities.OrderDetails">
+    <Position X="7" Y="2.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>CAACAAAAAAAAAAEACAAAAAQAAAAAAAACAAAAAAEAAAA=</HashCode>
+      <FileName>Entities\OrderDetails.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BRO.Domain.Entities.OrderHeader">
+    <Position X="3.75" Y="0.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>KAADAkJgAEECAgEIJDAAUAkAACAAAAAgQAIABACAAAg=</HashCode>
+      <FileName>Entities\OrderHeader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BRO.Domain.Entities.Product">
+    <Position X="0.5" Y="4" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAgCAEIAAAAgAgCQAAABAAQAAAEEABCEAAAEhAGAKgA=</HashCode>
+      <FileName>Entities\Product.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BRO.Domain.Entities.ProductTaste">
+    <Position X="9.75" Y="6.5" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>EAACAAABAAAAAAAAABAAAAAAQAQAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\ProductTaste.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BRO.Domain.Entities.Review">
+    <Position X="13.75" Y="6.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>EAADAAAIAgAAAAAAAAAAAAgAAAAAAAEAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Review.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BRO.Domain.Entities.Role">
+    <Position X="3.75" Y="7.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\Role.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BRO.Domain.Entities.ShoppingCartItem">
+    <Position X="7" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAACQCAAAAAQAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Entities\ShoppingCartItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BRO.Domain.Entities.Taste">
+    <Position X="0.5" Y="0.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAACAAAA=</HashCode>
+      <FileName>Entities\Taste.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BRO.Domain.Entities.UserRole">
+    <Position X="12.75" Y="4.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAABAAIAAAAAAAAAEAAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entities\UserRole.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

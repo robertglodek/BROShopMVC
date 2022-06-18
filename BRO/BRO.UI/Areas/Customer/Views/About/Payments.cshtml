@@ -1,0 +1,33 @@
+﻿@model List<BRO.Domain.Query.DTO.Carrier.CarrierDTO>
+
+@{
+    ViewData["Title"] = "Metody dostawy";
+
+}
+
+<div class="row align-items-center mb-3 mt-5">
+    <div class="col-11 col-md-6">
+        <h3 class="text-secondary m-0">Oferowane metody płatności</h3>
+    </div>
+    <div class="col-1 col-md-6">
+
+    </div>
+</div>
+
+<div class="mt-0">
+    <div class="mt-2">
+        <p class="fs-5 my-1 ">Płatność przy odbiorze:</p>
+        <p class="my-1"><i class="far fa-thumbs-up text-warning"></i><span class="ps-2">Gotówka</span></p>
+        <p class="my-1"><i class="far fa-thumbs-up text-warning"></i><span class="ps-2">Karta płatnicza</span></p>
+        <p class="fs-5 mt-3 mb-0">Płatność z góry:</p>
+        <p class="my-1"><i class="far fa-thumbs-up text-warning"></i><span class="ps-2">@PaymentMethods.PaymendMethodOnline</span></p>
+        <p class="my-1"><i class="far fa-thumbs-up text-warning"></i><span class="ps-2">@PaymentMethods.PaymentMethodBankTransfer</span></p>
+    </div>
+
+    <div class="mt-4">
+        <span>
+            Zdajemy sobie sprawę, jak ważna jest dla państwa kwestia płatności. Staraliśmy się dostosować preferencje naszych klientów względem różnych metod zapłaty. W zależności czy będzie to dostawa z przedpłatą, czy płatnością przy odbiorze, będą mieli państwo możliwość wyboru sposobu zapłaty adekwatną do dostawy.
+        </span>
+    </div>
+
+</div>

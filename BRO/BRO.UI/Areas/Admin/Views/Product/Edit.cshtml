@@ -1,0 +1,206 @@
+﻿
+
+@model BRO.UI.ViewModels.EditProductViewModel
+@{
+    ViewData["Title"] = "Edytuj produkt";
+    var photoPath = "~/images/products/";
+
+
+}
+
+<form method="post" enctype="multipart/form-data" class="mt-5">
+    <div asp-validation-summary="ModelOnly" class="text-danger val  mb-2 ms-0 p-0"></div>
+    <input asp-for="@Model.Product.Id" readonly hidden />
+    <input asp-for="@Model.Product.ConcurrencyStamp" readonly hidden />
+    <input asp-for="@Model.Product.ImageUrlLarge" readonly hidden />
+    <input asp-for="@Model.Product.ImageUrlMain" readonly hidden />
+    <div class="row p-3 border">
+        <div class="col-12 border-bottom ">
+            <h2 class="text-secondary">@ViewData["Title"]</h2>
+        </div>
+        <div class="col-12 col-md-8 pt-4">
+            <div class="form-group row align-items-center text-secondary">
+                <div class="col-sm-4 col-12">
+                    <label asp-for="@Model.Product.Name"></label>
+                </div>
+                <div class="col-sm-8 col-12">
+                    <input asp-for="@Model.Product.Name" class="form-control" />
+                    <span asp-validation-for="@Model.Product.Name" class="text-danger">
+                    </span>
+                </div>
+            </div>
+            <div class="form-group row align-items-center text-secondary mt-3">
+                <div class="col-sm-4 col-12">
+                    <label asp-for="@Model.Product.SearchTag"></label>
+                </div>
+                <div class="col-sm-8 col-12">
+                    <input asp-for="@Model.Product.SearchTag" class="form-control" />
+                    <span asp-validation-for="@Model.Product.SearchTag" class="text-danger">
+                    </span>
+                </div>
+            </div>
+            <div class="form-group row align-items-center text-secondary mt-3">
+                <div class="col-sm-4 col-12">
+                    <label asp-for="@Model.Product.Portions"></label>
+                </div>
+                <div class="col-sm-8 col-12">
+                    <input asp-for="@Model.Product.Portions" class="form-control" />
+                    <span asp-validation-for="@Model.Product.Portions" class="text-danger">
+                    </span>
+                </div>
+            </div>
+            <div class="form-group row align-items-center text-secondary mt-3">
+                <div class="col-sm-4 col-12">
+                    <label asp-for="@Model.Product.RegularPrice"></label>
+                </div>
+                <div class="col-sm-8 col-12">
+                    <input asp-for="@Model.Product.RegularPrice" class="form-control" />
+                    <span asp-validation-for="@Model.Product.RegularPrice" class="text-danger">
+                    </span>
+                </div>
+            </div>
+            <div class="form-group row align-items-center text-secondary mt-3">
+                <div class="col-4">
+                    <label asp-for="@Model.Product.IsDiscount"></label>
+                </div>
+                <div class="col-8 text-center">
+                    <input type="checkbox" asp-for="@Model.Product.IsDiscount" class="form-check-input  bg-warning" />
+
+                </div>
+            </div>
+            <div class="form-group row align-items-center text-secondary mt-3">
+                <div class="col-4">
+                    <label asp-for="@Model.Product.Availability"></label>
+                </div>
+                <div class="col-8 text-center">
+                    <input type="checkbox" asp-for="@Model.Product.Availability" class="form-check-input bg-warning" />
+
+                </div>
+            </div>
+            <div class="form-group row align-items-center text-secondary mt-3">
+                <div class="col-sm-4 col-12">
+                    <label asp-for="@Model.Product.PromotionalPrice"></label>
+                </div>
+                <div class="col-sm-8 col-12">
+                    <input asp-for="@Model.Product.PromotionalPrice" class="form-control" />
+                    <span asp-validation-for="@Model.Product.PromotionalPrice" class="text-danger">
+                    </span>
+                </div>
+            </div>
+            <div class="form-group row align-items-center text-secondary mt-3">
+                <div class="col-sm-4 col-12">
+                    <label asp-for="@Model.Product.WeightGram"></label>
+                </div>
+                <div class="col-sm-8 col-12">
+                    <input asp-for="@Model.Product.WeightGram" class="form-control" />
+                    <span asp-validation-for="@Model.Product.WeightGram" class="text-danger">
+                    </span>
+                </div>
+            </div>
+            <div class="form-group row align-items-center text-secondary mt-3">
+                <div class="col-sm-4 col-12">
+                    <label asp-for="@Model.Product.Description"></label>
+                </div>
+                <div class="col-sm-8 col-12">
+                    <textarea asp-for="@Model.Product.Description" class="form-control"></textarea>
+                    <span asp-validation-for="@Model.Product.Description" class="text-danger">
+                    </span>
+                </div>
+            </div>
+            <div class="form-group row align-items-center text-secondary mt-3">
+                <div class="col-sm-4 col-12">
+                    <label asp-for="@Model.Product.Use"></label>
+                </div>
+                <div class="col-sm-8 col-12">
+                    <textarea asp-for="@Model.Product.Use" class="form-control"></textarea>
+                    <span asp-validation-for="@Model.Product.Use" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row align-items-center text-secondary mt-3">
+                <div class="col-sm-4 col-12">
+                    <label asp-for="@Model.Product.NutritionalInformation"></label>
+                </div>
+                <div class="col-sm-8 col-12">
+                    <textarea asp-for="@Model.Product.NutritionalInformation" class="form-control"></textarea>
+                    <span asp-validation-for="@Model.Product.NutritionalInformation" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group text-secondary row mt-3">
+                <div class="col-sm-4 col-12">
+                    Kategoria
+                </div>
+                <div class="col-sm-8 col-12">
+                    <div class="">
+                        @Html.DropDownListFor(m => m.Product.CategoryId, Model.Categories, "Wybierz kategorię", new { @class = "form-control" })
+                        <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group text-secondary row  mt-3">
+                <div class="col-sm-4 col-12">
+                    Producent
+                </div>
+                <div class="col-sm-8 col-12">
+                    <div>
+                        @Html.DropDownListFor(m => m.Product.ManufacturerId, Model.Manufacturers, "Wybierz producenta", new { @class = "form-control" })
+                        <span asp-validation-for="Product.ManufacturerId" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group text-secondary row  mt-3">
+                <div class="col-sm-4 col-12">
+                    Smaki
+                </div>
+                <div class="col-sm-8 col-12">
+                    <div>
+                        @Html.ListBoxFor(n => n.Product.TasteIds, Model.Tastes, new { @class = "form-control" })
+                        <span asp-validation-for="Product.TasteIds" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row align-items-center text-secondary mt-3">
+                <div class="col-sm-4 col-12">
+                    <label asp-for="@Model.ImageUrlLarge"></label>
+                </div>
+                <div class="col-sm-8 col-12">
+                    <div>
+                        <input asp-for="@Model.ImageUrlLarge" class="form-control" type="file">
+                        <span asp-validation-for="@Model.ImageUrlLarge" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <img src="@photoPath@Model.Product.ImageUrlLarge" class="imageThumbnail col-sm-6 offset-sm-6 rounded mt-3 img-fluid" asp-append-version="true" />
+            <div class="form-group row align-items-center text-secondary mt-3">
+                <div class="col-sm-4 col-12">
+                    <label asp-for="@Model.ImageUrlMain"></label>
+                </div>
+                <div class="col-sm-8 col-12">
+                    <div>
+                        <input asp-for="@Model.ImageUrlMain" class="form-control" type="file">
+                        <span asp-validation-for="@Model.ImageUrlMain" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <img src="@photoPath@Model.Product.ImageUrlMain" class="imageThumbnail col-sm-6 offset-sm-6 rounded mt-3 img-fluid" asp-append-version="true" />
+
+
+            <div class="row mt-4">
+                <div class="col-12 col-md-8 offset-md-4">
+                    <div class="row">
+                        <div class=" col-12 col-md-6 ">
+                            <button type="submit" class="btn btn-outline-warning form-control">Edytuj</button>
+                        </div>
+                        <div class="col-12 col-md-6 mt-1 mt-md-0">
+                            <a asp-action="Index" class="btn btn-outline-secondary form-control">Powrót</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+} 

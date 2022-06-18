@@ -1,0 +1,400 @@
+﻿@model BRO.Domain.Query.DTO.OrderHeader.OrderHeaderDetailsDTO
+@using BRO.Domain.Utilities.StaticDetails
+
+<div class="row align-items-center mb-5 mt-5">
+    <div class="col-1  col-sm-6">
+    </div>
+    <div class="col-11 col-sm-6  text-end">
+        <h3 class="text-secondary m-0 ">Szczegóły zamówienia</h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <partial name="_AccountPartial" />
+    </div>
+    <div class="col-12 col-md-7 offset-md-1">
+        <div class="ms-auto">
+            <div id="order_products">
+                <table class="table tb table-striped">
+                    <thead class="tab-pane">
+                        <tr>
+                            <th scope="col">Nazwa</th>
+                            <th scope="col">Cena</th>
+                            <th scope="col">Ilość</th>
+                            <th scope="col">Wartość</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var details in Model.OrderDetails)
+                        {
+
+                            <tr>
+                                <td data-label="Nazwa">
+                                    @details.ProductTaste.Product.Name
+                                </td>
+                                <td data-label="Cena">
+                                    @details.PricePerProduct.ToString("C")
+                                </td>
+                                <td data-label="Ilość">
+                                    @details.Count
+                                </td>
+
+                                <td data-label="Wartość">
+                                    @{
+                                        var productTotalPerProduct = details.Count * details.PricePerProduct;
+                                    }
+                                    @productTotalPerProduct.ToString("C")
+                                </td>
+
+                            </tr>
+
+                        }
+                      
+                        @if (Model.DiscountCode != null)
+                        {
+                            <tr>
+                                <td data-label="Nazwa">
+                                    Kod zniżkowy - @Model.DiscountCode.CodeName
+                                </td>
+                                <td data-label="Zniżka">
+                                    @Model.DiscountInPercent%
+                                </td>
+                                <td data-label="Ilość">
+                                    nie dotyczy
+                                </td>
+
+                                <td data-label="Wartość">
+                                    @{
+                                        var productdiscount = (Model.OrderProductsTotal * Model.DiscountInPercent) / (100 - Model.DiscountInPercent);
+                                    }
+                                    -@productdiscount.ToString("C")
+                                </td>
+                            </tr>
+                        }
+
+                        <tr>
+                            <td data-label="Nazwa">
+                                Przedmioty
+                            </td>
+                            <td data-label="Cena">
+                                @Model.OrderProductsTotal.ToString("C")
+                            </td>
+                        </tr>
+                        <tr>
+                            <td data-label="Nazwa">
+                                Wysyłka
+                            </td>
+                            <td data-label="Cena">
+                                @Model.OrderShippingCost.ToString("C")
+                            </td>
+                        </tr>
+                        <tr>
+                            <td data-label="Nazwa">
+                                Razem
+                            </td>
+                            <td data-label="Cena">
+                                @{
+                                    var orderTotal = Model.OrderProductsTotal + Model.OrderShippingCost;
+                                }
+                                <span>@orderTotal.ToString("C")</span>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="order_deliveryAdress mt-3">
+                <h4 class="text-secondary  pb-1">Dane do dostawy</h4>
+                <div>
+                    <div class="form-group row align-items-center text-secondary">
+                        <div class="col-sm-4 col-12">
+                            <label asp-for="FirstName"></label>
+                        </div>
+                        <div class="col-sm-8 col-12">
+                            <input asp-for="FirstName" class="form-control" readonly />
+                        </div>
+                    </div>
+                    <div class="form-group row align-items-center text-secondary mt-3">
+                        <div class="col-sm-4 col-12">
+                            <label asp-for="LastName"></label>
+                        </div>
+                        <div class="col-sm-8 col-12">
+                            <input asp-for="LastName" class="form-control" readonly />
+
+                        </div>
+                    </div>
+                    <div class="form-group row align-items-center text-secondary mt-3">
+                        <div class="col-sm-4 col-12">
+                            <label asp-for="PhoneNumber"></label>
+                        </div>
+                        <div class="col-sm-8 col-12">
+                            <input asp-for="PhoneNumber" class="form-control" readonly />
+
+                        </div>
+                    </div>
+                    <div class="form-group row align-items-center text-secondary mt-3">
+                        <div class="col-sm-4 col-12">
+                            <label asp-for="Street"></label>
+                        </div>
+                        <div class="col-sm-8 col-12">
+                            <input asp-for="Street" class="form-control" readonly />
+
+                        </div>
+                    </div>
+                    <div class="form-group row align-items-center text-secondary mt-3">
+                        <div class="col-sm-4 col-12">
+                            <label asp-for="City"></label>
+                        </div>
+                        <div class="col-sm-8 col-12">
+                            <input asp-for="City" class="form-control" readonly />
+
+                        </div>
+                    </div>
+
+                    <div class="form-group row align-items-center text-secondary mt-3">
+                        <div class="col-sm-4 col-12">
+                            <label asp-for="PostalCode"></label>
+                        </div>
+                        <div class="col-sm-8 col-12">
+                            <input asp-for="PostalCode" class="form-control" readonly />
+
+                        </div>
+                    </div>
+                    <div class="form-group row align-items-center text-secondary mt-3">
+                        <div class="col-sm-4 col-12">
+                            <label asp-for="UserDescription"></label>
+                        </div>
+                        <div class="col-sm-8 col-12 text-center">
+                            <span class="form-control text-start " style="min-height:36px; padding:6px 12px 6px 12px;background-color: #e9ecef ">
+                                @Model.UserDescription
+                            </span>
+                        </div>
+                    </div>
+                    @if (Model.MessageToUser != null)
+                    {
+                        <div class="form-group row align-items-center text-secondary mt-3">
+                            <div class="col-sm-4 col-12">
+                                <label asp-for="MessageToUser" class="text-warning"></label>
+                            </div>
+                            <div class="col-sm-8 col-12 text-center">
+                                <span class="form-control text-start " style="min-height:36px; padding:6px 12px 6px 12px;background-color: #e9ecef ">
+                                    @Model.MessageToUser
+                                </span>
+                            </div>
+                        </div>
+
+                    }
+
+                </div>
+
+            </div>
+            @if (Model.OrderBillId != null)
+            {
+                <div id="order_orderBill mt-3 ">
+                    <h4 class="text-secondary  pb-1  pt-4 ">Dane do faktury</h4>
+
+                    <div class="form-group row align-items-center text-secondary mt-3">
+                        <div class="col-sm-4 col-12">
+                            <label asp-for="OrderBill.CompanyName"></label>
+                        </div>
+                        <div class="col-sm-8 col-12">
+                            <input asp-for="OrderBill.CompanyName" class="form-control" readonly />
+                        </div>
+                    </div>
+
+                    <div class="form-group row align-items-center text-secondary mt-3">
+                        <div class="col-sm-4 col-12">
+                            <label asp-for="OrderBill.NIP"></label>
+                        </div>
+                        <div class="col-sm-8 col-12">
+                            <input asp-for="OrderBill.NIP" class="form-control" readonly />
+                        </div>
+                    </div>
+
+                    <div class="form-group row align-items-center text-secondary mt-3">
+                        <div class="col-sm-4 col-12">
+                            <label asp-for="OrderBill.Street"></label>
+                        </div>
+                        <div class="col-sm-8 col-12">
+                            <input asp-for="OrderBill.Street" class="form-control" readonly />
+                        </div>
+                    </div>
+                    <div class="form-group row align-items-center text-secondary mt-3">
+                        <div class="col-sm-4 col-12">
+                            <label asp-for="OrderBill.City"></label>
+                        </div>
+                        <div class="col-sm-8 col-12">
+                            <input asp-for="OrderBill.City" class="form-control" readonly />
+                        </div>
+                    </div>
+                    <div class="form-group row align-items-center text-secondary mt-3">
+                        <div class="col-sm-4 col-12">
+                            <label asp-for="OrderBill.PostalCode"></label>
+                        </div>
+                        <div class="col-sm-8 col-12">
+                            <input asp-for="OrderBill.PostalCode" class="form-control" readonly />
+                        </div>
+                    </div>
+
+                </div>
+            }
+
+        <div class="order_deliveryMethod mt-3">
+            <h4 class="text-secondary pb-1">Metody dostawy i płatności</h4>
+            <div>
+                <table class="table tb table-striped">
+                    <thead class="tab-pane">
+                        <tr>
+                            <th scope="col">Nazwa</th>
+                            <th scope="col">Waga</th>
+
+                            <th scope="col">Śledzenie paczki</th>
+
+                          
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-label="Nazwa">
+                                @Model.Carrier.Name
+                            </td>
+                            <td data-label="Waga">
+                                @{ 
+                                    var weight = 0f;
+                                    foreach (var item in Model.OrderDetails)
+                                    {
+                                        weight += item.ProductTaste.Product.WeightGram;
+
+                                    }
+
+                                }
+                                <span>@weight g</span>
+                                
+                            </td>
+                            <td data-label="Śledzenie paczki">
+                                @if (@Model.TrackingNumber != null)
+                                {
+                                    @Model.TrackingNumber
+                                }
+                                else
+                                {
+                                    <span> Numer nie nadany</span>
+                                }
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+           
+
+        </div>
+
+        <div class="payment_method mt-0 pt-0">
+            <div>
+                <table class="table tb table-striped">
+                    <thead class="tab-pane">
+                        <tr>
+                            <th scope="col">Nazwa</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Data zapłaty</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-label="Nazwa">
+                                @Model.PaymentMethod
+                            </td>
+                            <td data-label="Status">
+                                @Model.PaymentStatus
+
+                            </td>
+                            <td data-label="Data zapłaty">
+                                @if (@Model.PaymentDate != null)
+                                {
+                                    var date = ((DateTimeOffset)Model.PaymentDate);
+                                    <span> @date.ToString("MM/dd/yyyy HH:mm")</span>
+                                   
+                                }
+                                else
+                                {
+                                    <span></span>
+                                }
+
+                            </td>
+
+
+                          
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+
+      
+        <div id="order_details mt-3">
+            <h4 class="text-secondary  pb-1">Dane zamówienia</h4>
+            <div>
+                <div class="form-group row align-items-center text-secondary">
+                    <div class="col-sm-4 col-12">
+                        <label asp-for="OrderStatus"></label>
+                    </div>
+                    <div class="col-sm-8 col-12">
+                        <input asp-for="OrderStatus" class="form-control" readonly />
+                    </div>
+                </div>
+                <div class="form-group row align-items-center text-secondary mt-3">
+                    <div class="col-sm-4 col-12">
+                        <label asp-for="OrderDate"></label>
+                    </div>
+                    <div class="col-sm-8 col-12">
+                        @{
+                            var orderDate = Model.OrderDate != null ? ((DateTimeOffset)Model.OrderDate).ToString("MM/dd/yyyy HH:mm") : "";
+                        }
+                        <input value="@orderDate" class="form-control" readonly />
+                        
+                    </div>
+                </div>
+                <div class="form-group row align-items-center text-secondary mt-3">
+                    <div class="col-sm-4 col-12">
+                        <label asp-for="ShippingDate"></label>
+                    </div>
+                    <div class="col-sm-8 col-12">
+                        @{
+                            var shippingDate = Model.ShippingDate != null ? ((DateTimeOffset)Model.ShippingDate).ToString("MM/dd/yyyy HH:mm") : "";
+                            
+                        }
+                        <input value="@shippingDate" class="form-control" readonly />
+
+                    </div>
+                </div>
+                <div class="form-group row align-items-center text-secondary mt-3">
+                    <div class="col-sm-4 col-12">
+                        <label asp-for="DeliveryDate"></label>
+                    </div>
+                    <div class="col-sm-8 col-12">
+                        @{ 
+                            var dateDelivery = Model.DeliveryDate != null ? ((DateTimeOffset)Model.DeliveryDate).ToString("MM/dd/yyyy HH:mm") : "";  
+                        }
+                        <input  value="@dateDelivery" class="form-control" readonly />
+
+                    </div>
+                </div>     
+            </div>
+
+        </div>
+
+
+        </div>
+    </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

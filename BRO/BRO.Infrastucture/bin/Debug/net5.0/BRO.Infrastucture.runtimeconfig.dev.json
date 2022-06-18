@@ -1,0 +1,8 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "C:\\Users\\youtu\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\youtu\\.nuget\\packages"
+    ]
+  }
+}

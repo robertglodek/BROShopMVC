@@ -1,0 +1,103 @@
+﻿@model BRO.UI.ViewModels.OrderCarrierViewModel
+
+@{
+    ViewData["Title"] = "Wybór dostawcy";
+
+}
+<div class="row align-items-center mb-5 mt-5">
+    <div class="col-6">
+        <h3 class="text-secondary m-0 ">@ViewData["Title"]</h3>
+    </div>
+    <div class="col-6  text-end">
+    </div>
+</div>
+<form method="post" asp-action="Payment">
+    <div asp-validation-summary="ModelOnly" class="text-danger val mt-3 mb-2 ms-0 ps-0 "></div>
+    <div class="row card">
+        <input hidden id="carrierId" asp-for="CarrierId" value="@Model.Carriers.FirstOrDefault().Id" />
+        <input id="orderTotalInput" hidden asp-for="OrderProductsTotal" />
+        <input id="shippingCostInput" hidden asp-for="OrderShippingCost" value="@Model.Carriers.FirstOrDefault().ActualShippingCost" />
+        <div class="col-12 card-body">
+            <ul class="list-group mb-3" id="DeliveryMethods">
+                @foreach (var item in Model.Carriers)
+                {
+                    <li class="list-group-item d-flex  flex-wrap" style="cursor:pointer" data-id="@item.Id" data-cost="@item.ActualShippingCost">
+                        <div>
+                            <span class="my-0 fs-5 me-auto me-md-0 d-md-inline d-block">@item.Name</span>
+                            <small class="text-muted">@item.DeliveryTimeScope.ToLower()</small>
+                            @{
+                                if (@item.Prepayment)
+                                {
+                                    <small class="text-muted">przedpłata</small>
+                                }
+                                else
+                                {
+                                    <small class="text-muted">zapłata na miejscu</small>
+                                }
+                            }                        
+                        </div>
+                        <span class=" text-dark  fs-5 w-100">koszt: @item.ActualShippingCost.ToString("C")</span>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="col-12 card-footer bg-white">
+            <div class="text-end  my-0 py-0">
+                <div class="fs-4 text-dark bg-light p-0">
+                    <div>
+                        @{
+                            var orderTotal = Model.OrderProductsTotal + Model.Carriers.FirstOrDefault().ActualShippingCost;
+                        }
+                        <div class="d-flex  align-items-center flex-wrap justify-content-between py-2 ps-2 ">
+                            <div class="d-flex align-items-center ">
+                                <span class="text-dark pe-2 fs-6">Całkowity koszt:</span><span id="orderTotal" class="fs-4">@orderTotal.ToString("C")</span>
+                            </div>
+                           <input asp-for="@Model.DiscountCode" class=" me-2 p-1 m-0 fs-6 ms-sm-auto " placeholder="Wprowadź kod rabatowy"   />
+                        </div>
+                    </div>
+                </div>
+                <div class="row bg-white mt-1">
+                    <div class="col-md-3">
+                        <div class="">
+                            <a asp-action="Index" asp-area="Customer" asp-controller="ShoppingCart" class="btn btn-outline-warning form-control">Cofnij</a>
+                        </div>
+                    </div>
+                    <div class="col-md-3 offset-md-6 mt-3 mt-md-0">
+                        <div class="">
+                            <button id="submitButton" type="submit" value="Place Order" class="btn   btn-outline-danger form-control">Kontynuuj</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@section Scripts
+{
+    <script>
+
+        const formatter = new Intl.NumberFormat('pl-PL', {
+            style: 'currency',
+            currency: 'PLN',
+            minimumFractionDigits: 2
+        })
+        const deliveryMethods = document.querySelectorAll("#DeliveryMethods li");
+        deliveryMethods[0].style.border = "2px solid #ffc107"
+        deliveryMethods.forEach(element => {
+            element.addEventListener("click", function (event) {
+                document.querySelector("#carrierId").value = this.dataset.id;         
+                deliveryMethods.forEach(n => { n.style.border = "1px solid rgba(0,0,0,0.125)" });
+                this.style.border = "2px solid #ffc107";
+                document.querySelector("#shippingCostInput").value = this.dataset.cost;              
+                document.querySelector("#orderTotal").textContent = formatter.format(Number(this.dataset.cost) + Number(document.querySelector("#orderTotalInput").value));
+            });
+        })
+    </script>
+}
+
+
+
+
+
+
+

@@ -1,0 +1,460 @@
+﻿@model BRO.UI.ViewModels.OrderDetailsViewModel
+@using BRO.Domain.Utilities.StaticDetails
+
+@{
+    ViewData["Title"] = "Szczegóły zamówienia";
+}
+
+<div class="row align-items-center mb-5 mt-3">
+    <div class="col-6">
+        <h3 class="text-secondary m-0">Szczegóły zamówienia</h3>
+    </div>
+    <div class="col-6  text-end">
+
+    </div>
+</div>
+<form method="post">
+    <input hidden asp-for="Command.Id" readonly />
+    <input hidden asp-for="Command.ConcurrencyStamp" readonly />
+    <div asp-validation-summary="ModelOnly" class="text-danger val  mb-2 ms-0 p-0"></div>
+    <div class="rounded p-2">
+        <div class="row">
+            <div class="col-12 col-md-6 pt-4">
+                <div class="form-group row align-items-center text-secondary">
+                    <div class="col-sm-4 col-12">
+                        <label asp-for="Command.FirstName"></label>
+                    </div>
+                    <div class="col-sm-8 col-12">
+                        <input asp-for="Command.FirstName" class="form-control" />
+                        <span asp-validation-for="Command.FirstName" class="text-danger">
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group row align-items-center text-secondary mt-3">
+                    <div class="col-sm-4 col-12">
+                        <label asp-for="Command.LastName"></label>
+                    </div>
+                    <div class="col-sm-8 col-12">
+                        <input asp-for="Command.LastName" class="form-control" />
+                        <span asp-validation-for="Command.LastName" class="text-danger">
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group row align-items-center text-secondary mt-3">
+                    <div class="col-sm-4 col-12">
+                        <label asp-for="Command.PhoneNumber"></label>
+                    </div>
+                    <div class="col-sm-8 col-12">
+                        <input asp-for="Command.PhoneNumber" class="form-control" />
+                        <span asp-validation-for="Command.PhoneNumber" class="text-danger">
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group row align-items-center text-secondary mt-3">
+                    <div class="col-sm-4 col-12">
+                        <label asp-for="Command.Street"></label>
+                    </div>
+                    <div class="col-sm-8 col-12">
+                        <input asp-for="Command.Street" class="form-control" />
+                        <span asp-validation-for="Command.Street" class="text-danger">
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group row align-items-center text-secondary mt-3">
+                    <div class="col-sm-4 col-12">
+                        <label asp-for="Command.City"></label>
+                    </div>
+                    <div class="col-sm-8 col-12">
+                        <input asp-for="Command.City" class="form-control" />
+                        <span asp-validation-for="Command.City" class="text-danger">
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group row align-items-center text-secondary mt-3">
+                    <div class="col-sm-4 col-12">
+                        <label asp-for="Command.PostalCode"></label>
+                    </div>
+                    <div class="col-sm-8 col-12 text-center">
+                        <input asp-for="Command.PostalCode" class="form-control" />
+                        <span asp-validation-for="Command.PostalCode" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row align-items-center text-secondary mt-3">
+                    <div class="col-sm-4 col-12">
+                        <label asp-for="Command.MessageToUser"></label>
+                    </div>
+                    <div class="col-sm-8 col-12 text-center">
+                        <textarea asp-for="Command.MessageToUser" class="form-control"></textarea>
+                        <span asp-validation-for="Command.MessageToUser" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row align-items-center text-secondary mt-3">
+                    <div class="col-sm-4 col-12">
+                        <label asp-for="Command.TrackingNumber"></label>
+                    </div>
+                    <div class="col-sm-8 col-12 text-center">
+                        <input asp-for="Command.TrackingNumber" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="form-group row align-items-center text-secondary mt-3">
+                    <div class="col-sm-4 col-12">
+                        <label asp-for="UserEmail"></label>
+                    </div>
+                    <div class="col-sm-8 col-12 text-center">
+                        <input asp-for="UserEmail" class="form-control" readonly />
+
+                    </div>
+                </div>
+
+                <div class="form-group row align-items-center text-secondary mt-3">
+                    <div class="col-sm-4 col-12">
+                        <label asp-for="Command.OrderDate"></label>
+                    </div>
+                    <div class="col-sm-8 col-12 text-center">
+                        <input value="@(Model.Command.OrderDate != null ? Model.Command.OrderDate.Value.ToString("MM/dd/yyyy HH:mm") : "")" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="form-group row align-items-center text-secondary mt-3">
+                    <div class="col-sm-4 col-12">
+                        <label asp-for="Command.PaymentDate"></label>
+                    </div>
+                    <div class="col-sm-8 col-12 text-center">
+                        <input asp-for="Command.PaymentDate" type="datetime-local" class="form-control" />
+                    </div>
+                </div>
+
+
+                <div class="form-group row align-items-center text-secondary mt-3">
+                    <div class="col-sm-4 col-12">
+                        <label asp-for="Command.ShippingDate"></label>
+                    </div>
+                    <div class="col-sm-8 col-12 text-center">
+
+                        <input asp-for="Command.ShippingDate" type="datetime-local" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="form-group row align-items-center text-secondary mt-3">
+                    <div class="col-sm-4 col-12">
+                        <label asp-for="Command.DeliveryDate"></label>
+                    </div>
+                    <div class="col-sm-8 col-12 text-center">
+
+                        <input asp-for="Command.DeliveryDate" type="datetime-local" class="form-control" />
+                    </div>
+                </div>
+                @if (Model.Command.PaymentMethod == PaymentMethods.PaymendMethodOnline)
+                {
+                    <div class="form-group row align-items-center text-secondary mt-3">
+                        <div class="col-sm-4 col-12">
+                            <label asp-for="Command.TransactionId"></label>
+                        </div>
+                        <div class="col-sm-8 col-12 text-center">
+                            <input asp-for="Command.TransactionId" class="form-control" readonly />
+                        </div>
+                    </div>
+                }
+                <div class="form-group row align-items-center text-secondary mt-3">
+                    <div class="col-sm-4 col-12">
+                        <label asp-for="Carrier"></label>
+                    </div>
+                    <div class="col-sm-8 col-12 text-center">
+                        <input asp-for="Carrier" class="form-control" readonly />
+                    </div>
+                </div>
+
+
+                <div class="form-group row align-items-center text-secondary mt-3">
+                    <div class="col-sm-4 col-12">
+                        <label asp-for="Command.PaymentMethod"></label>
+                    </div>
+                    <div class="col-sm-8 col-12 text-center">
+                        <input asp-for="Command.PaymentMethod" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="form-group row align-items-center text-secondary mt-3">
+                    <div class="col-sm-4 col-12">
+                        <label asp-for="Command.OrderStatus"></label>
+                    </div>
+                    <div class="col-sm-8 col-12 text-center">
+                        <input asp-for="Command.OrderStatus" class="form-control" readonly />
+                    </div>
+                </div>
+                <div class="form-group row align-items-center text-secondary mt-3">
+                    <div class="col-sm-4 col-12">
+                        <label asp-for="Command.PaymentStatus"></label>
+                    </div>
+                    <div class="col-sm-8 col-12 text-center">
+                        <input asp-for="Command.PaymentStatus" class="form-control" readonly />
+                    </div>
+                </div>
+
+                <div class="form-group row align-items-center text-secondary mt-3">
+                    <div class="col-sm-4 col-12">
+                        <label asp-for="Command.UserDescription"></label>
+                    </div>
+                    <div class="col-sm-8 col-12 text-center">
+                        <span class="form-control text-start" style="min-height:36px; padding:6px 12px 6px 12px;background-color: #e9ecef ">
+                            @Model.Command.UserDescription
+                        </span>
+                    </div>
+                </div>
+                @if (Model.OrderBill != null)
+                {
+                    <div class="form-group row align-items-center text-secondary mt-3">
+                        <div class="col-4">
+                            <label>Faktura VAT</label>
+                        </div>
+                        <div class="col-8 text-center">
+                            <input disabled="disabled" checked type="checkbox" class="form-check-input  bg-warning" />
+                        </div>
+                    </div>
+                    <div class="form-group row align-items-center text-secondary mt-3">
+                        <div class="col-sm-4 col-12">
+                            <label asp-for="OrderBill.CompanyName"></label>
+                        </div>
+                        <div class="col-sm-8 col-12 text-center">
+                            <input asp-for="OrderBill.CompanyName" class="form-control" readonly />
+                        </div>
+                    </div>
+
+                    <div class="form-group row align-items-center text-secondary mt-3">
+                        <div class="col-sm-4 col-12">
+                            <label asp-for="OrderBill.NIP"></label>
+                        </div>
+                        <div class="col-sm-8 col-12 text-center">
+                            <input asp-for="OrderBill.NIP" class="form-control" readonly />
+                        </div>
+                    </div>
+
+                    <div class="form-group row align-items-center text-secondary mt-3">
+                        <div class="col-sm-4 col-12">
+                            <label asp-for="OrderBill.Street"></label>
+                        </div>
+                        <div class="col-sm-8 col-12 text-center">
+                            <input asp-for="OrderBill.Street" class="form-control" readonly />
+                        </div>
+                    </div>
+                    <div class="form-group row align-items-center text-secondary mt-3">
+                        <div class="col-sm-4 col-12">
+                            <label asp-for="OrderBill.City"></label>
+                        </div>
+                        <div class="col-sm-8 col-12 text-center">
+                            <input asp-for="OrderBill.City" class="form-control" readonly />
+                        </div>
+                    </div>
+                    <div class="form-group row align-items-center text-secondary mt-3">
+                        <div class="col-sm-4 col-12">
+                            <label asp-for="OrderBill.PostalCode"></label>
+                        </div>
+                        <div class="col-sm-8 col-12 text-center">
+                            <input asp-for="OrderBill.PostalCode" class="form-control" readonly />
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group row align-items-center text-secondary mt-3">
+                        <div class="col-4">
+                            <label>Faktura</label>
+                        </div>
+                        <div class="col-8 text-center">
+                            <input disabled="disabled" type="checkbox" class="form-check-input  bg-warning" />
+                        </div>
+                    </div>
+                }
+                <div class="mt-3">
+                    <button formaction="/Employee/Order/UpdateDetails" formmethod="post" type="submit" class="btn btn-outline-warning form-control mb-4 mb-md-0">Zmień dane</button>
+                </div>
+
+
+            </div>
+
+            <div class="col-12 col-md-5 offset-md-1">
+                <div>
+                    <table class="table tb table-striped">
+                        <thead class="tab-pane">
+                            <tr>
+                                <th scope="col">Nazwa</th>
+                                <th scope="col">Cena</th>
+                                <th scope="col">Ilość</th>
+                                <th scope="col">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var details in Model.OrderDetails)
+                            {
+
+                                <tr>
+                                    <td data-label="Nazwa">
+                                        @details.ProductTaste.Product.Name
+                                    </td>
+                                    <td data-label="Cena">
+                                        @details.PricePerProduct.ToString("C")
+                                    </td>
+                                    <td data-label="Ilość">
+                                        @details.Count
+                                    </td>
+
+                                    <td data-label="Cena całowita">
+                                        @{
+                                            var productTotal = details.Count * details.PricePerProduct;
+                                        }
+                                        @productTotal.ToString("C")
+                                    </td>
+
+                                </tr>
+                            }
+                            @if (Model.Code != null)
+                            {
+                                <tr>
+                                    <td data-label="Nazwa">
+                                        Kod zniżkowy - @Model.Code.CodeName
+                                    </td>
+                                    <td data-label="Zniżka">
+                                        @Model.Command.DiscountInPercent%
+                                    </td>
+                                    <td data-label="Ilość">
+                                        nie dotyczy
+                                    </td>
+
+                                    <td data-label="Wartość">
+                                        @{
+                                            var productdiscount = (Model.Command.OrderProductsTotal * Model.Command.DiscountInPercent) / (100 - Model.Command.DiscountInPercent);
+                                        }
+                                        -@productdiscount.ToString("C")
+                                    </td>
+                                </tr>
+                            }
+
+                            <tr>
+                                <td data-label="Nazwa">
+                                    Przedmioty
+                                </td>
+                                <td data-label="Cena">
+                                    @Model.Command.OrderProductsTotal.ToString("C")
+                                </td>
+                            </tr>
+                            <tr>
+                                <td data-label="Nazwa">
+                                    Wysyłka
+                                </td>
+                                <td data-label="Cena">
+                                    @Model.Command.OrderShippingCost.ToString("C")
+                                </td>
+                            </tr>
+                            <tr>
+                                <td data-label="Nazwa">
+                                    Razem
+                                </td>
+                                <td data-label="Cena">
+                                    @{
+                                        var orderTotal = Model.Command.OrderProductsTotal + Model.Command.OrderShippingCost;
+                                    }
+                                    <span>@orderTotal.ToString("C")</span>
+
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+                @if (Model.Command.PaymentStatus ==PaymentStatus.PaymentStatusPending)
+                {
+                    <div class="mt-3">
+                        <a asp-action="Paid" asp-route-id="@Model.Command.Id" asp-route-concurrencyStamp="@Model.Command.ConcurrencyStamp"
+                           class="btn btn-outline-warning form-control">Zapłacono</a>
+                    </div>
+                }
+                @if (Model.Command.OrderStatus != OrderStatus.OrderStatusCancelled && Model.Command.PaymentStatus != PaymentStatus.PaymentStatusApproved && Model.Command.OrderStatus != OrderStatus.OrderStatusRefunded)
+                {
+                    <div class="mt-3">
+
+                        <a asp-action="Cancel" asp-route-id="@Model.Command.Id" asp-route-concurrencyStamp="@Model.Command.ConcurrencyStamp"
+                           class="btn btn-outline-danger form-control">Anuluj</a>
+                    </div>
+                }
+                @if (Model.Command.OrderStatus != OrderStatus.OrderStatusCancelled && Model.Command.OrderStatus
+                  != OrderStatus.OrderStatusRefunded && Model.Command.PaymentStatus == PaymentStatus.PaymentStatusApproved)
+                {
+                    <div class="mt-3">
+                        <a asp-action="Refunded" asp-route-id="@Model.Command.Id" asp-route-concurrencyStamp="@Model.Command.ConcurrencyStamp"
+                           class="btn btn-outline-warning form-control">Zwrot</a>
+                    </div>
+                }
+                @if ((Model.Command.PaymentStatus == PaymentStatus.PaymentStatusApproved || Model.Command.PaymentMethod == PaymentMethods.PaymendMethodOnDelivery)
+                  && Model.Command.OrderStatus == OrderStatus.OrderStatusPending)
+                {
+                    <div class="mt-3">
+                        <a asp-action="StartProccessing" asp-route-id="@Model.Command.Id" asp-route-concurrencyStamp="@Model.Command.ConcurrencyStamp"
+                           class="btn btn-outline-warning form-control">Przetwarzanie</a>
+                    </div>
+                }
+                @if (Model.Command.OrderStatus == OrderStatus.OrderStatusInProcess)
+                {
+                    <div class="mt-3">
+                        <a asp-action="ShipOrder" asp-route-id="@Model.Command.Id" asp-route-concurrencyStamp="@Model.Command.ConcurrencyStamp"
+                           class="btn btn-outline-warning form-control">Wysłano</a>
+                    </div>
+                }
+                @if (Model.Command.OrderStatus == OrderStatus.OrderStatusShipped)
+                {
+                    <div class="mt-3">
+                        <a asp-action="Delivered" asp-route-id="@Model.Command.Id" asp-route-concurrencyStamp="@Model.Command.ConcurrencyStamp"
+                           class="btn btn-outline-warning form-control">Dostarczono</a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@{
+    var action = TempData.Get<PerformedAction>("PerformedAction");
+}
+@if (action != null)
+{
+    <div class="action_perform action_perform_active  pointer position-fixed @(action.ActionSuccessfull?"bg-success":"bg-danger") align-items-center text-white rounded p-3">
+        <i class="fas fa-check "></i>
+        <span class="ps-2 acction_message">@action.ActionMessage</span>
+    </div>
+}
+else
+{
+    <div class="action_perform pointer position-fixed align-items-center text-white rounded p-3">
+        <i class="fas fa-check "></i>
+        <span class="ps-2 acction_message"></span>
+    </div>
+}
+
+
+
+
+
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const action_perform_element = document.querySelector(".action_perform");
+        let success_action_timeout;
+        action_perform_element.addEventListener("click", (event) => {
+            clearTimeout(success_action_timeout);
+            action_perform_element.classList.remove("action_perform_active")
+        })
+        function hideActionSuccess() {
+            action_perform_element.classList.remove("action_perform_active")
+        }
+        if (action_perform_element.classList.contains("action_perform_active")) {
+            success_action_timeout = setTimeout(hideActionSuccess, 3000)
+        }
+    </script>
+}
+

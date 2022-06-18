@@ -1,0 +1,81 @@
+﻿@model List<BRO.Domain.Query.DTO.OrderHeader.OrderHeaderDTO>
+@using BRO.Domain.Utilities.StaticDetails
+
+<div class="row align-items-center mb-5 mt-5">
+    <div class="col-1  col-sm-6">
+    </div>
+    <div class="col-11 col-sm-6  text-end">
+        <h3 class="text-secondary m-0 ">Historia zamówień</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <partial name="_AccountPartial" />
+    </div>
+
+    <div class="col-md-7 offset-md-2">
+        @if (Model.Count() > 0)
+        {
+            <div>
+                <table class="table tb table-striped">
+                    <thead class="tab-pane">
+                        <tr>
+                            <th scope="col">Numer</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Koszt</th>
+                            <th scope="col">Data zakupu</th>
+                            <th scope="col">Zapłata</th>
+                            <th scope="col">Szczegóły</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td data-label="Numer">
+                                    @item.OrderNumber
+                                </td>
+                                <td data-label="Status zamówienia">
+                                    @item.OrderStatus
+                                </td>
+                                <td data-label="Cena końcowa">
+                                    @{
+                                        var orderTotal = item.OrderProductsTotal + item.OrderShippingCost;
+
+                                    }
+                                    @orderTotal.ToString("C")
+                                </td>
+                                <td data-label="Data zakupu">
+                                    @item.OrderDate.Value.ToString("MM/dd/yyyy HH:mm")
+                                </td>
+                                <td data-label="Zapłata">
+                                    @if ((PaymentStatus.PaymentStatusPending == item.PaymentStatus || PaymentStatus.PaymentStatusCanceled == item.PaymentStatus) && item.PaymentMethod == PaymentMethods.PaymendMethodOnline)
+                                    {
+
+                                        <form asp-action="PayAgain" asp-controller="Order" asp-area="Customer" method="post" asp-route-id="@item.Id">
+                                            <button type="submit" class="text-warning " style="border:0px; background-color:transparent" >Zapłać ponownie</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <span>@item.PaymentStatus</span>
+                                    }
+
+                                </td>
+                                <td data-label="Szczegóły">
+                                    <a class="text-secondary " asp-action="OrderDetails" asp-route-Id="@item.Id">Szczegóły</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="border-2 border-secondary border row text-center mt-4 align-items-center p-2 mx-md-0 mx-3  ">
+                <p class="fs-5 m-0 text-secondary">Brak zamówień !!</p>
+            </div>
+        }
+    </div>
+</div>

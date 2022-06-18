@@ -1,0 +1,17 @@
+﻿@{
+    var action = TempData.Get<PerformedAction>("PerformedAction");
+}
+@if (action != null)
+{
+    <div class="action_perform action_perform_active  pointer position-fixed @(action.ActionSuccessfull?"bg-success":"bg-danger") align-items-center text-white rounded p-3">
+        <i class="fas fa-check "></i>
+        <span class="ps-2 acction_message">@action.ActionMessage</span>
+    </div>
+}
+else
+{
+    <div class="action_perform pointer position-fixed align-items-center text-white rounded p-3">
+        <i class="fas fa-check "></i>
+        <span class="ps-2 acction_message"></span>
+    </div>
+}
